@@ -1,0 +1,19 @@
+{
+    "name": "kodi/wp-library",
+    "version": "1.0.0",
+    "description": "Wordpress classes library",
+    "type": "library",
+    "license": "gpl-3.0",
+    "authors": [
+        {
+            "name": "Dmitry Kokorin",
+            "email": "dmitri.kokorin@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+		"classmap": [
+			"src/"
+		]
+	}
+}
