@@ -2,7 +2,7 @@
     "name": "kodi/wp-library",
     "description": "Wordpress classes library",
     "type": "library",
-    "license": "gpl-3.0",
+    "license": "gpl-3.0-or-later",
     "authors": [
         {
             "name": "Dmitry Kokorin",
