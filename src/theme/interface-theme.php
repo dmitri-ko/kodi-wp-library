@@ -14,7 +14,7 @@ namespace Kodi\Theme;
  */
 interface Theme {
 	/**
-	 *  Run theme
+	 *  Load theme
 	 */
-	public function run();
+	public function load();
 }
