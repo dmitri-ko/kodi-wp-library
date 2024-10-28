@@ -12,9 +12,11 @@
 namespace Kodi\Configurator;
 
 use DKO\DDNA\AssetManagement\Asset_Path;
+use DKO\DDNA\AssetManagement\Asset_Registrator;
 use Kodi\EventManagement\Subscriber_Interface;
 use Kodi\Provider\JSON_Provider;
 use Kodi\Settings\Sanitized_Settings;
+use Kodi\Subscriber\Admin_Assets_Subscriber;
 use Kodi\Subscriber\Assets_Subscriber;
 use Kodi\Validator\Settings_Validator;
 
@@ -101,12 +103,24 @@ abstract class Base_Theme_Configurator implements Configurator {
 
 		$this->subscribers = array(
 			new Assets_Subscriber(
-				new Asset_Path( 'bundle-style', 'assets', get_stylesheet_directory(), get_stylesheet_uri() ),
-				new Asset_Path( 'bundle', 'assets', get_stylesheet_directory(), get_stylesheet_uri() ),
-				$settings->get_property( 'slug' ),
-				$settings->get_property( 'version' ),
-				trailingslashit( get_stylesheet_directory() ) . 'language',
-				$settings->get_property( 'slug' )
+				new Asset_Registrator(
+					new Asset_Path( 'bundle-style', 'assets', get_stylesheet_directory(), get_stylesheet_uri() ),
+					new Asset_Path( 'bundle', 'assets', get_stylesheet_directory(), get_stylesheet_uri() ),
+					$settings->get_property( 'slug' ) . '-bundle',
+					$settings->get_property( 'version' ),
+					trailingslashit( get_stylesheet_directory() ) . 'language',
+					$settings->get_property( 'slug' )
+				)
+			),
+			new Admin_Assets_Subscriber(
+				new Asset_Registrator(
+					new Asset_Path( 'admin-style', 'assets', get_stylesheet_directory(), get_stylesheet_uri() ),
+					new Asset_Path( 'admin', 'assets', get_stylesheet_directory(), get_stylesheet_uri() ),
+					$settings->get_property( 'slug' ) . '-admin',
+					$settings->get_property( 'version' ),
+					trailingslashit( get_stylesheet_directory() ) . 'language',
+					$settings->get_property( 'slug' )
+				)
 			),
 		);
 

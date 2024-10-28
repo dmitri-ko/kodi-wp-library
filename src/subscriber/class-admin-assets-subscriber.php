@@ -22,7 +22,7 @@ use Kodi\EventManagement\Subscriber_Interface;
  *
  * @author BuzzDeveloper
  */
-class Assets_Subscriber implements Subscriber_Interface {
+class Admin_Assets_Subscriber implements Subscriber_Interface {
 	/**
 	 * Assets manager
 	 *
@@ -44,7 +44,7 @@ class Assets_Subscriber implements Subscriber_Interface {
 	 */
 	public static function get_subscribed_events() {
 		return array(
-			'wp_enqueue_scripts' => 'manage_assets',
+			'admin_enqueue_scripts' => 'manage_assets',
 		);
 	}
 
