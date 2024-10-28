@@ -21,6 +21,15 @@ interface Settings {
 	public function get_raw_data(): array;
 
 	/**
+	 * Get property.
+	 *
+	 * @param  string $property_name Property name.
+	 *
+	 * @return string
+	 */
+	public function get_property( string $property_name ): string;
+
+	/**
 	 * Check if option is set
 	 *
 	 * @param  string $setting Setting name.

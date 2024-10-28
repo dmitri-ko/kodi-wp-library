@@ -9,6 +9,7 @@
 
 namespace Kodi\Theme;
 
+use Kodi\Configurator\Configurator;
 use Kodi\EventManagement\Event_Manager;
 use Kodi\EventManagement\Subscriber_Interface;
 use Kodi\Shortcode\Shortcode_Interface;
@@ -17,9 +18,9 @@ use Kodi\Shortcode\Shortcode_Interface;
  * The core theme class.
  * Defines internationalization, admin-specific hooks, and public-facing site hooks.
  *
- * @link https://www.walger-marketing.de/dko-events
+ * @link https://buzzdeveloper.net
  *
- * @author Walger Marketing
+ * @author BuzzDeveloper
  */
 class WP_Theme implements Theme {
 
@@ -39,18 +40,14 @@ class WP_Theme implements Theme {
 
 	private $name;
 	private $slug;
-	private $subscribers;
+	private $configurator;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param string $file Path to the plugin dir.
-	 */
-	public function __construct( string $name, array $subscribers ) {
+
+	public function __construct( string $name, Configurator $configurator ) {
 		$this->event_manager = new Event_Manager();
 		$this->loaded        = false;
 		$this->name          = $name;
-		$this->subscribers   = $subscribers;
+		$this->configurator  = $configurator;
 	}
 
 	/**
@@ -72,25 +69,17 @@ class WP_Theme implements Theme {
 			return;
 		}
 
-		foreach ( $this->get_subscribers() as $subscriber ) {
+		foreach ( $this->configurator->get_subscribers() as $subscriber ) {
 			$this->event_manager->add_subscriber( $subscriber );
 		}
 
-		foreach ( $this->get_shortcodes() as $shortcode ) {
+		foreach ( $this->configurator->get_shortcodes() as $shortcode ) {
 			$this->register_shortcode( $shortcode );
 		}
 
 		$this->loaded = true;
 	}
 
-	/**
-	 * Get the plugin shortcodes.
-	 *
-	 * @return Shortcode_Interface[]
-	 */
-	private function get_shortcodes() {
-		return array();
-	}
 	/**
 	 * Get the plugin event subscribers.
 	 *

@@ -62,7 +62,7 @@ class Settings_Validator implements Validator {
 		if ( $this->is_ready() ) {
 			foreach ( $this->ruleset as $rule_name => $rule ) {
 				if ( ( 'settings' !== $rule_name ) && is_string( $rule ) ) {
-					array_push( $roots, array( $rule_name => $rule ) );
+					array_push( $roots, $rule );
 				}
 			}
 		}
@@ -81,7 +81,7 @@ class Settings_Validator implements Validator {
 			$settings = isset( $this->ruleset[ self::SETTINGS_KEY ] ) ? $this->ruleset[ self::SETTINGS_KEY ] : array();
 		}
 
-		return $settings;
+		return array_keys( $settings );
 	}
 
 	/**
@@ -138,7 +138,7 @@ class Settings_Validator implements Validator {
 				if ( ! in_array( $setting_name, $this->get_all_settings_rules(), true ) ) {
 					return false;
 				}
-				foreach ( $settings as $setting ) {
+				foreach ( $settings as $setting => $setting_value ) {
 					if ( ! in_array( $setting, $this->get_all_options_rules( $setting_name ), true ) ) {
 						return false;
 					}

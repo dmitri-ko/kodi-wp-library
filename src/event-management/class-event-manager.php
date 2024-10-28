@@ -9,10 +9,12 @@
 
 namespace Kodi\EventManagement;
 
+use Kodi\Shortcode\Shortcode_Interface;
+
 /**
  * The event manager manages events using the WordPress plugin API.
  *
- * @author Walger Marketing
+ * @author BuzzDeveloper
  */
 class Event_Manager {
 
@@ -39,7 +41,7 @@ class Event_Manager {
 	 *
 	 * @param Subscriber_Interface $subscriber Subscriber.
 	 */
-	public function add_subscriber( Subscriber_Interface $subscriber ) {
+	public function add_subscriber( $subscriber ) {
 		foreach ( $subscriber->get_subscribed_events() as $hook_name => $parameters ) {
 			$this->add_subscriber_callback( $subscriber, $hook_name, $parameters );
 		}

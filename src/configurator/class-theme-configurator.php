@@ -65,7 +65,8 @@ class Theme_Configurator implements Configurator {
 	/**
 	 * Configure WordPress theme
 	 */
-	public function configure() {
+	public function configure(): array {
+		$cfg     = array();
 		$ruleset = array(
 			'version',
 			'name',
@@ -77,5 +78,15 @@ class Theme_Configurator implements Configurator {
 			new JSON_Provider( self::get_file_path_from_theme( self::CONFIG_NAME ) ),
 			new Settings_Validator( $ruleset )
 		);
+
+		foreach ( $this->hooks as $hook => $options ) {
+			foreach ( $options as $option => $value ) {
+				if ( $settings->has_support( $hook, $option ) ) {
+					array_push( $cfg, $value );
+				}
+			}
+		}
+
+		return $cfg;
 	}
 }

@@ -14,7 +14,16 @@ namespace Kodi\Configurator;
  */
 interface Configurator {
 	/**
-	 * Configure
+	 * Get the plugin event subscribers.
+	 *
+	 * @return Kodi\EventManagement\Subscriber_Interface[]
 	 */
-	public function configure();
+	public function get_subscribers(): array;
+
+	/**
+	 * Get the plugin shortcodes.
+	 *
+	 * @return Kodi\Shortcode\Shortcode_Interface[]
+	 */
+	public function get_shortcodes(): array;
 }

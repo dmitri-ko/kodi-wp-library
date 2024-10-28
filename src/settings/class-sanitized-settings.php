@@ -45,8 +45,9 @@ class Sanitized_Settings implements Settings {
 	 * @param  \Kodi\Validator\Validator $validator Data validator.
 	 */
 	public function __construct( Provider $provider, Validator $validator ) {
-		$this->provider  = $provider;
-		$this->validator = $validator;
+		$this->provider     = $provider;
+		$this->validator    = $validator;
+		$this->data_storage = array();
 
 		$this->load();
 	}
@@ -58,8 +59,12 @@ class Sanitized_Settings implements Settings {
 	 */
 	private function load() {
 		foreach ( $this->provider->get_data() as $name => $value ) {
-			if ( $this->validator->is_array( $name, $value ) ) {
-				$this->data_storage[ $name ] = $value;
+			if ( $this->validator->is_allowed( $name, $value ) ) {
+				if ( is_array( $value ) ) {
+					$this->data_storage = array_merge( $this->data_storage, $value );
+				} else {
+					$this->data_storage[ $name ] = $value;
+				}
 			}
 		}
 	}
@@ -71,6 +76,17 @@ class Sanitized_Settings implements Settings {
 	 */
 	public function get_raw_data(): array {
 		return $this->data_storage;
+	}
+
+	/**
+	 * Get property.
+	 *
+	 * @param  string $property_name Property name.
+	 *
+	 * @return string
+	 */
+	public function get_property( string $property_name ): string {
+		return isset( $this->data_storage[ $property_name ] ) && is_string( $this->data_storage[ $property_name ] ) ? $this->data_storage[ $property_name ] : '';
 	}
 
 	/**
