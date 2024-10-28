@@ -4,12 +4,10 @@
  *
  * @since             1.0.0
  * @package           Kodi
- * @subpackage        Subscriber
+ * @subpackage        EventManagement
  */
 
 namespace Kodi\EventManagement;
-
-use Kodi\Shortcode\Shortcode_Interface;
 
 /**
  * The event manager manages events using the WordPress plugin API.

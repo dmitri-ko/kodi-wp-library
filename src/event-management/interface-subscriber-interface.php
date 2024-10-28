@@ -4,7 +4,7 @@
  *
  * @since             1.0.0
  * @package           Kodi
- * @subpackage        Subscriber
+ * @subpackage        EventManagement
  */
 
 namespace Kodi\EventManagement;
