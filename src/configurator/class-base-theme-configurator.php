@@ -12,6 +12,7 @@
 namespace Kodi\Configurator;
 
 use DKO\DDNA\AssetManagement\Asset_Path;
+use Kodi\EventManagement\Subscriber_Interface;
 use Kodi\Provider\JSON_Provider;
 use Kodi\Settings\Sanitized_Settings;
 use Kodi\Subscriber\Assets_Subscriber;
@@ -40,12 +41,28 @@ abstract class Base_Theme_Configurator implements Configurator {
 	 */
 	protected $available_settings;
 
+
+	/**
+	 * Subscribers
+	 *
+	 * @var Kodi\EventManagement\Subscriber_Interface[]
+	 */
+	protected $subscribers;
+
+	/**
+	 * Loaded flag
+	 *
+	 * @var bool
+	 */
+	protected $is_loaded;
+
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
 		$this->hooks              = array();
 		$this->available_settings = array();
+		$this->is_loaded          = false;
 	}
 
 	/**
@@ -69,7 +86,7 @@ abstract class Base_Theme_Configurator implements Configurator {
 	/**
 	 * Configure WordPress theme
 	 */
-	public function configure(): array {
+	protected function configure() {
 		$ruleset = array(
 			'version',
 			'name',
@@ -82,25 +99,28 @@ abstract class Base_Theme_Configurator implements Configurator {
 			new Settings_Validator( $ruleset )
 		);
 
-		$cfg = array(
+		$this->subscribers = array(
 			new Assets_Subscriber(
 				new Asset_Path( 'bundle-style', 'assets', get_stylesheet_directory(), get_stylesheet_uri() ),
 				new Asset_Path( 'bundle', 'assets', get_stylesheet_directory(), get_stylesheet_uri() ),
-				$settings->get_property( 'name' ),
+				$settings->get_property( 'slug' ),
 				$settings->get_property( 'version' ),
-				trailingslashit( get_stylesheet_directory() ) . 'language'
+				trailingslashit( get_stylesheet_directory() ) . 'language',
+				$settings->get_property( 'slug' )
 			),
 		);
 
 		foreach ( $this->hooks as $hook => $options ) {
 			foreach ( $options as $option => $value ) {
 				if ( $settings->has_support( $hook, $option ) ) {
-					array_push( $cfg, $value );
+					if ( $value instanceof Subscriber_Interface ) {
+						array_push( $this->subscribers, $value );
+					}
 				}
 			}
 		}
 
-		return $cfg;
+		$this->is_loaded = true;
 	}
 
 	/**
@@ -108,7 +128,12 @@ abstract class Base_Theme_Configurator implements Configurator {
 	 *
 	 * @return Kodi\EventManagement\Subscriber_Interface[]
 	 */
-	abstract public function get_subscribers(): array;
+	public function get_subscribers(): array {
+		if ( ! $this->is_loaded ) {
+			$this->configure();
+		}
+		return $this->subscribers;
+	}
 
 	/**
 	 * Get the plugin shortcodes.

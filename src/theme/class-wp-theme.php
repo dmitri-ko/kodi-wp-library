@@ -81,22 +81,6 @@ class WP_Theme implements Theme {
 	}
 
 	/**
-	 * Get the plugin event subscribers.
-	 *
-	 * @return Subscriber_Interface[]
-	 */
-	private function get_subscribers(): array {
-		$valid_subscribers = array();
-		foreach ( $this->subscribers as $maybe_valid_subscriber ) {
-			if ( $maybe_valid_subscriber instanceof Subscriber_Interface ) {
-				array_push( $valid_subscribers, $maybe_valid_subscriber );
-			}
-		}
-
-		return $valid_subscribers;
-	}
-
-	/**
 	 * Register the given shortcode with the WordPress shortcode API.
 	 *
 	 * @param Shortcode_Interface $shortcode Shortcode.
