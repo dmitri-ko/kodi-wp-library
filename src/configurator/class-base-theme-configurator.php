@@ -13,14 +13,13 @@ namespace Kodi\Configurator;
 
 use Kodi\Provider\JSON_Provider;
 use Kodi\Settings\Sanitized_Settings;
-use Kodi\Settings\Settings;
 use Kodi\Validator\Settings_Validator;
 
 /**
  * Class that abstracts the processing of the different data sources
  * for site-level content and offers an API to work with them.
  */
-class Theme_Configurator implements Configurator {
+abstract class Base_Theme_Configurator implements Configurator {
 
 	const CONFIG_NAME = 'theme-settings.json';
 
@@ -38,11 +37,6 @@ class Theme_Configurator implements Configurator {
 	 * @var array
 	 */
 	protected $available_settings;
-
-	public function __construct( array $hooks, array $available_settings ) {
-		$this->hooks              = $hooks;
-		$this->available_settings = $available_settings;
-	}
 
 	/**
 	 * Builds the path to the given file and checks that it is readable.
@@ -89,4 +83,18 @@ class Theme_Configurator implements Configurator {
 
 		return $cfg;
 	}
+
+	/**
+	 * Get the plugin event subscribers.
+	 *
+	 * @return Kodi\EventManagement\Subscriber_Interface[]
+	 */
+	abstract public function get_subscribers(): array;
+
+	/**
+	 * Get the plugin shortcodes.
+	 *
+	 * @return Kodi\Shortcode\Shortcode_Interface[]
+	 */
+	abstract public function get_shortcodes(): array;
 }
