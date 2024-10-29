@@ -1,74 +1,80 @@
 <?php
 /**
- * This file is part of the Kodi WordPress Library.
+ * AssetMeta
  *
- * (c) BuzzDeveloper
+ * Handles retrieval and parsing of metadata for assets in the WordPress environment.
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * This class provides functionality to retrieve metadata, such as dependencies and versioning,
+ * for JavaScript or CSS assets.
  *
- * @author     BuzzDeveloper
  * @package    Kodi
  * @subpackage AssetManagement
+ * @since      1.0.0
  */
 
-namespace DKO\DDNA\AssetManagement;
+namespace Kodi\AssetManagement;
 
 /**
- * Define the assets functionality
+ * Class AssetMeta
  *
- * Adds assets file support for plugin.
+ * Retrieves asset metadata, such as dependencies and version, from specified files.
  *
- * @link https://buzzdeveloper.net
- *
- * @author BuzzDeveloper
+ * @since 1.0.0
  */
-class Asset_Meta {
+class AssetMeta {
 
 	/**
-	 * The path to the asset
+	 * Path to the metadata file.
 	 *
 	 * @var string
 	 */
-	private $asset_file_path;
+	private string $file_path;
 
 	/**
-	 * The assets
+	 * Constructor
 	 *
-	 * @var array
-	 */
-	private $assets;
-
-	/**
-	 * Create assets
+	 * Initializes the AssetMeta object with the path to the metadata file.
 	 *
-	 * @param string $asset_file_path the psth to the asset.
+	 * @param string $file_path Path to the metadata file.
 	 */
-	public function __construct( string $asset_file_path ) {
-		$this->asset_file_path = $asset_file_path;
-		$this->init();
+	public function __construct( string $file_path ) {
+		$this->file_path = $file_path;
 	}
 
 	/**
-	 * Initialize assets
+	 * Retrieve asset metadata.
 	 *
-	 * @return void
-	 * @throws \Error The assets file doesn't exist.
-	 */
-	private function init() {
-		$this->assets = array();
-		if ( ! file_exists( $this->asset_file_path ) ) {
-			throw new \Error( __( 'Asset file is not found.', 'kodi-wp-library' ) );
-		}
-		$this->assets = include $this->asset_file_path;
-	}
-
-	/**
-	 * Get assets
+	 * Reads metadata from the file path provided during initialization. Metadata typically
+	 * includes dependencies and versioning information required for WordPress to properly
+	 * enqueue styles and scripts.
 	 *
-	 * @return array
+	 * @since 1.0.0
+	 * @throws \RuntimeException If the file cannot be read.
+	 * @return array Associative array containing 'dependencies' and 'version'.
 	 */
 	public function get_assets(): array {
-		return $this->assets;
+		if ( ! is_readable( $this->file_path ) ) {
+			throw new \RuntimeException( sprintf( 'Asset metadata file %s is not readable.', $this->file_path ) );
+		}
+
+		$assets = include $this->file_path;
+
+		if ( ! is_array( $assets ) || ! isset( $assets['dependencies'], $assets['version'] ) ) {
+			throw new \RuntimeException( sprintf( 'Asset metadata file %s is not valid.', $this->file_path ) );
+		}
+
+		return $assets;
+	}
+
+	/**
+	 * Check if metadata file exists and is readable.
+	 *
+	 * This method can be used to verify if the specified metadata file is available and can be read.
+	 *
+	 * @since 1.0.0
+	 * @return bool True if the metadata file is readable, false otherwise.
+	 */
+	public function is_valid(): bool {
+		return is_readable( $this->file_path );
 	}
 }

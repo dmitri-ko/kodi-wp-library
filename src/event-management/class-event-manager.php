@@ -1,45 +1,56 @@
 <?php
 /**
- * WordPress API Event manager
+ * EventManager
  *
- * @since             1.0.0
- * @package           Kodi
- * @subpackage        EventManagement
+ * Manages WordPress hooks (actions and filters) using the WordPress Plugin API.
+ *
+ * @package    Kodi
+ * @subpackage EventManagement
+ * @since      1.0.0
  */
 
 namespace Kodi\EventManagement;
 
+use Kodi\EventManagement\Interfaces\SubscriberInterface;
+
 /**
- * The event manager manages events using the WordPress plugin API.
+ * Class EventManager
  *
- * @author BuzzDeveloper
+ * Manages event subscriptions, actions, and filters in WordPress.
+ * Provides functionality to add, remove, and manage hook callbacks.
+ *
+ * @since 1.0.0
  */
-class Event_Manager {
+class EventManager {
 
 	/**
-	 * Adds a callback to a specific hook of the WordPress plugin API.
+	 * Adds a callback to a specific hook in the WordPress Plugin API.
 	 *
-	 * @uses add_filter()
-	 * @uses add_action()
+	 * Supports adding callbacks to both actions and filters.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @param string   $hook_name     WordPress Plugin API hook name.
-	 * @param callable $callback      WordPress Plugin API hook callback.
-	 * @param int      $priority      The hook priority.
-	 * @param int      $accepted_args Number of accepted arguments.
+	 * @param callable $callback      The callback function.
+	 * @param int      $priority      The hook priority. Default is 10.
+	 * @param int      $accepted_args Number of accepted arguments. Default is 1.
+	 * @return void
 	 */
-	public function add_callback( $hook_name, $callback, $priority = 10, $accepted_args = 1 ) {
+	public function add_callback( string $hook_name, callable $callback, int $priority = 10, int $accepted_args = 1 ): void {
 		add_filter( $hook_name, $callback, $priority, $accepted_args );
 	}
 
 	/**
-	 * Add an event subscriber.
+	 * Adds an event subscriber.
 	 *
-	 * The event manager registers all the hooks that the given subscriber
-	 * wants to register with the WordPress Plugin API.
+	 * Registers all the hooks specified by the subscriber with the WordPress Plugin API.
 	 *
-	 * @param Subscriber_Interface $subscriber Subscriber.
+	 * @since 1.0.0
+	 *
+	 * @param SubscriberInterface $subscriber The event subscriber.
+	 * @return void
 	 */
-	public function add_subscriber( $subscriber ) {
+	public function add_subscriber( SubscriberInterface $subscriber ): void {
 		foreach ( $subscriber->get_subscribed_events() as $hook_name => $parameters ) {
 			$this->add_subscriber_callback( $subscriber, $hook_name, $parameters );
 		}
@@ -48,114 +59,121 @@ class Event_Manager {
 	/**
 	 * Executes all the callbacks registered with the given hook.
 	 *
-	 * @uses do_action()
+	 * @since 1.0.0
+	 *
+	 * @param mixed ...$args Arguments to pass to the hook callbacks.
+	 * @return void
 	 */
-	public function execute() {
-		$args = func_get_args();
-		return call_user_func_array( 'do_action', $args );
+	public function execute( ...$args ): void {
+		do_action( ...$args );
 	}
 
 	/**
-	 * Filters the given value by applying all the changes from the callbacks
-	 * registered with the given hook. Returns the filtered value.
+	 * Filters the given value by applying all the changes from the callbacks registered with the given hook.
 	 *
-	 * @uses apply_filters()
+	 * Returns the filtered value.
 	 *
-	 * @return mixed
+	 * @since 1.0.0
+	 *
+	 * @param mixed ...$args Arguments to pass to the filter callbacks.
+	 * @return mixed Filtered value.
 	 */
-	public function filter() {
-		$args = func_get_args();
-		return call_user_func_array( 'apply_filters', $args );
+	public function filter( ...$args ) {
+		return apply_filters( ...$args );
 	}
 
 	/**
-	 * Get the name of the hook that WordPress plugin API is executing. Returns
-	 * false if it isn't executing a hook.
+	 * Gets the name of the currently executing hook.
 	 *
-	 * @uses current_filter()
+	 * Returns false if there is no current hook executing.
 	 *
-	 * @return string|bool
+	 * @since 1.0.0
+	 *
+	 * @return string|bool Hook name if a hook is executing, false otherwise.
 	 */
 	public function get_current_hook() {
 		return current_filter();
 	}
 
 	/**
-	 * Checks the WordPress plugin API to see if the given hook has
-	 * the given callback. The priority of the callback will be returned
-	 * or false. If no callback is given will return true or false if
-	 * there's any callbacks registered to the hook.
+	 * Checks if the given hook has the specified callback registered.
 	 *
-	 * @uses has_filter()
+	 * Returns the callback priority or false if the callback is not registered.
+	 * If no callback is provided, returns true or false indicating if there are any callbacks for the hook.
 	 *
-	 * @param string $hook_name The hook name.
-	 * @param mixed  $callback  The hook callback.
+	 * @since 1.0.0
 	 *
-	 * @return bool|int
+	 * @param string   $hook_name The hook name.
+	 * @param callable $callback  Optional. The callback function.
+	 * @return bool|int True if there are callbacks, priority of the callback, or false if not found.
 	 */
-	public function has_callback( $hook_name, $callback = false ) {
+	public function has_callback( string $hook_name, $callback = false ) {
 		return has_filter( $hook_name, $callback );
 	}
 
 	/**
-	 * Removes the given callback from the given hook. The WordPress plugin API only
-	 * removes the hook if the callback and priority match a registered hook.
+	 * Removes a callback from the specified hook.
 	 *
-	 * @uses remove_filter()
+	 * @since 1.0.0
 	 *
 	 * @param string   $hook_name The hook name.
-	 * @param callable $callback  The hook callback.
-	 * @param int      $priority  The hook priority.
-	 *
-	 * @return bool
+	 * @param callable $callback  The callback function.
+	 * @param int      $priority  The priority at which the callback was added. Default is 10.
+	 * @return bool True if the callback was successfully removed, false otherwise.
 	 */
-	public function remove_callback( $hook_name, $callback, $priority = 10 ) {
+	public function remove_callback( string $hook_name, callable $callback, int $priority = 10 ): bool {
 		return remove_filter( $hook_name, $callback, $priority );
 	}
 
 	/**
-	 * Remove an event subscriber.
+	 * Removes an event subscriber.
 	 *
-	 * The event manager removes all the hooks that the given subscriber
-	 * wants to register with the WordPress Plugin API.
+	 * Unregisters all hooks that the subscriber had registered with the WordPress Plugin API.
 	 *
-	 * @param Subscriber_Interface $subscriber The subscriber.
+	 * @since 1.0.0
+	 *
+	 * @param SubscriberInterface $subscriber The event subscriber.
+	 * @return void
 	 */
-	public function remove_subscriber( Subscriber_Interface $subscriber ) {
+	public function remove_subscriber( SubscriberInterface $subscriber ): void {
 		foreach ( $subscriber->get_subscribed_events() as $hook_name => $parameters ) {
 			$this->remove_subscriber_callback( $subscriber, $hook_name, $parameters );
 		}
 	}
 
 	/**
-	 * Adds the given subscriber's callback to a specific hook
-	 * of the WordPress plugin API.
+	 * Adds the subscriber's callback to a specific hook of the WordPress Plugin API.
 	 *
-	 * @param Subscriber_Interface $subscriber The subscriber.
-	 * @param string               $hook_name  The hook name.
-	 * @param mixed                $parameters The hook parameters.
+	 * @since 1.0.0
+	 *
+	 * @param SubscriberInterface $subscriber The event subscriber.
+	 * @param string              $hook_name  The hook name.
+	 * @param mixed               $parameters Hook parameters (callback, priority, accepted args).
+	 * @return void
 	 */
-	private function add_subscriber_callback( Subscriber_Interface $subscriber, $hook_name, $parameters ) {
+	private function add_subscriber_callback( SubscriberInterface $subscriber, string $hook_name, $parameters ): void {
 		if ( is_string( $parameters ) ) {
 			$this->add_callback( $hook_name, array( $subscriber, $parameters ) );
 		} elseif ( is_array( $parameters ) && isset( $parameters[0] ) ) {
-			$this->add_callback( $hook_name, array( $subscriber, $parameters[0] ), isset( $parameters[1] ) ? $parameters[1] : 10, isset( $parameters[2] ) ? $parameters[2] : 1 );
+			$this->add_callback( $hook_name, array( $subscriber, $parameters[0] ), $parameters[1] ?? 10, $parameters[2] ?? 1 );
 		}
 	}
 
 	/**
-	 * Removes the given subscriber's callback to a specific hook
-	 * of the WordPress plugin API.
+	 * Removes the subscriber's callback from a specific hook of the WordPress Plugin API.
 	 *
-	 * @param Subscriber_Interface $subscriber The subscriber.
-	 * @param string               $hook_name  The hook name.
-	 * @param mixed                $parameters The hook parameters.
+	 * @since 1.0.0
+	 *
+	 * @param SubscriberInterface $subscriber The event subscriber.
+	 * @param string              $hook_name  The hook name.
+	 * @param mixed               $parameters Hook parameters (callback, priority).
+	 * @return void
 	 */
-	private function remove_subscriber_callback( Subscriber_Interface $subscriber, $hook_name, $parameters ) {
+	private function remove_subscriber_callback( SubscriberInterface $subscriber, string $hook_name, $parameters ): void {
 		if ( is_string( $parameters ) ) {
 			$this->remove_callback( $hook_name, array( $subscriber, $parameters ) );
 		} elseif ( is_array( $parameters ) && isset( $parameters[0] ) ) {
-			$this->remove_callback( $hook_name, array( $subscriber, $parameters[0] ), isset( $parameters[1] ) ? $parameters[1] : 10 );
+			$this->remove_callback( $hook_name, array( $subscriber, $parameters[0] ), $parameters[1] ?? 10 );
 		}
 	}
 }

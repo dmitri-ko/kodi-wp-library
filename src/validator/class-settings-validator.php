@@ -1,68 +1,87 @@
 <?php
 /**
- * Settings validator
+ * SettingsValidator
  *
- * Handles structure validation according ruleset.
+ * Provides functionality for validating WordPress settings based on predefined rulesets.
  *
- * @since             1.0.0
- * @package           Kodi
- * @subpackage        Validator
+ * @package    Kodi
+ * @subpackage Validator
+ * @since      1.0.0
  */
 
 namespace Kodi\Validator;
 
-/**
- * Settings validator
- */
-class Settings_Validator implements Validator {
+use Kodi\Validator\Interfaces\ValidatorInterface;
 
-	const SETTINGS_KEY = 'settings';
+/**
+ * Class SettingsValidator
+ *
+ * Validates provided settings against a set of predefined rules.
+ * Ensures that all settings and their options conform to the allowed structure.
+ *
+ * @since 1.0.0
+ */
+class SettingsValidator implements ValidatorInterface {
 
 	/**
-	 * Rule set for setting structure
+	 * Key for settings within the ruleset.
 	 *
+	 * @since 1.0.0
+	 * @var string
+	 */
+	private const SETTINGS_KEY = 'settings';
+
+	/**
+	 * Ruleset array containing all validation rules.
+	 *
+	 * @since 1.0.0
 	 * @var array
 	 */
-	private $ruleset;
+	private array $ruleset;
 
 	/**
-	 * Ruleset valid flag
+	 * Indicates whether the ruleset has been validated and is ready.
 	 *
+	 * @since 1.0.0
 	 * @var bool
 	 */
-	private $is_valid;
+	private bool $is_valid = false;
 
 	/**
 	 * Constructor
 	 *
-	 * @param  array $ruleset Rule set for setting structure.
+	 * Initializes the validator with a ruleset and validates it.
+	 *
+	 * @since 1.0.0
+	 * @param array $ruleset Array containing the validation rules.
 	 */
 	public function __construct( array $ruleset ) {
 		$this->ruleset = $ruleset;
-
 		$this->check_rules();
 	}
 
 	/**
-	 * Check ruleset structure
+	 * Validates the ruleset and sets the readiness flag.
 	 *
+	 * @since 1.0.0
 	 * @return void
 	 */
-	private function check_rules() {
+	private function check_rules(): void {
 		$this->set_ready( true );
 	}
 
 	/**
-	 * Get all root rules
+	 * Retrieve all root-level rules from the ruleset.
 	 *
-	 * @return array
+	 * @since 1.0.0
+	 * @return array Array of root-level rule names.
 	 */
 	private function get_all_root_rules(): array {
 		$roots = array();
 		if ( $this->is_ready() ) {
 			foreach ( $this->ruleset as $rule_name => $rule ) {
-				if ( ( 'settings' !== $rule_name ) && is_string( $rule ) ) {
-					array_push( $roots, $rule );
+				if ( ( self::SETTINGS_KEY !== $rule_name ) && is_string( $rule ) ) {
+					$roots[] = $rule;
 				}
 			}
 		}
@@ -71,62 +90,66 @@ class Settings_Validator implements Validator {
 	}
 
 	/**
-	 * Get all settings rules
+	 * Retrieve all setting rules from the ruleset.
 	 *
-	 * @return array
+	 * @since 1.0.0
+	 * @return array Array of setting names defined in the ruleset.
 	 */
 	private function get_all_settings_rules(): array {
-		$settings = array();
-		if ( $this->is_ready() ) {
-			$settings = isset( $this->ruleset[ self::SETTINGS_KEY ] ) ? $this->ruleset[ self::SETTINGS_KEY ] : array();
+		if ( $this->is_ready() && isset( $this->ruleset[ self::SETTINGS_KEY ] ) ) {
+			return array_keys( $this->ruleset[ self::SETTINGS_KEY ] );
 		}
 
-		return array_keys( $settings );
+		return array();
 	}
 
 	/**
-	 * Get all option rules for setting
+	 * Retrieve all option rules for a specific setting.
 	 *
-	 * @param  string $setting_name Setting name.
-	 *
-	 * @return array
+	 * @since 1.0.0
+	 * @param string $setting_name The name of the setting.
+	 * @return array Array of options defined for the given setting.
 	 */
 	private function get_all_options_rules( string $setting_name ): array {
-		$options = array();
-		if ( $this->is_ready() ) {
-			$options = isset( $this->ruleset[ self::SETTINGS_KEY ] ) && isset( $this->ruleset[ self::SETTINGS_KEY ][ $setting_name ] ) ? $this->ruleset[ self::SETTINGS_KEY ][ $setting_name ] : array();
+		if ( $this->is_ready()
+			&& isset( $this->ruleset[ self::SETTINGS_KEY ] )
+			&& isset( $this->ruleset[ self::SETTINGS_KEY ][ $setting_name ] ) ) {
+			return $this->ruleset[ self::SETTINGS_KEY ][ $setting_name ];
 		}
 
-		return $options;
+		return array();
 	}
 
 	/**
-	 * Check validator state
+	 * Check if the ruleset is ready and validated.
 	 *
-	 * @return bool
+	 * @since 1.0.0
+	 * @return bool True if the ruleset is ready, false otherwise.
 	 */
 	public function is_ready(): bool {
 		return $this->is_valid;
 	}
 
 	/**
-	 * Set validator state
+	 * Set the readiness state of the ruleset.
 	 *
-	 * @param  bool $state Validator state.
-	 *
+	 * @since 1.0.0
+	 * @param bool $state True to set the ruleset as ready, false otherwise.
 	 * @return void
 	 */
-	public function set_ready( bool $state ) {
+	public function set_ready( bool $state ): void {
 		$this->is_valid = $state;
 	}
 
 	/**
-	 * Check if provided key/value is allowed.
+	 * Determine if the provided key/value pair is allowed based on the ruleset.
 	 *
-	 * @param  string $name Checked key.
-	 * @param  mixed  $value Checked value.
+	 * Validates settings and options against the predefined ruleset to determine if they are allowed.
 	 *
-	 * @return bool
+	 * @since 1.0.0
+	 * @param string $name  The name of the key being checked.
+	 * @param mixed  $value The value associated with the key being checked.
+	 * @return bool True if the key/value pair is allowed, false otherwise.
 	 */
 	public function is_allowed( string $name, mixed $value ): bool {
 		if ( ! $this->is_ready() ) {

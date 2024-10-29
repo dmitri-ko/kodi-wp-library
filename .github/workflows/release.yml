@@ -1,0 +1,62 @@
+name: Create Release with Specific Files
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2' # specify your PHP version
+
+      - name: Install dependencies
+        run: composer install --no-scripts --no-progress --no-suggest
+
+      - name: Extract version from composer.json
+        id: get_version
+        run: |
+          VERSION=$(jq -r '.version' composer.json)
+          echo "version=$VERSION" >> $GITHUB_ENV
+
+      - name: Create release package
+        run: |
+          mkdir release
+          cp -R src release/src
+          cp composer.json release/
+          cd release
+          zip -r "../release-v${{ env.version }}.zip" ./
+          cd ..
+
+      - name: Create Git tag
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git tag -a "v${{ env.version }}" -m "Release version ${{ env.version }}"
+          git push origin "v${{ env.version }}"
+
+      - name: Create GitHub release
+        uses: actions/create-release@v1
+        with:
+          tag_name: "v${{ env.version }}"
+          release_name: "Release v${{ env.version }}"
+          body: "Release version ${{ env.version }}"
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: "./release-v${{ env.version }}.zip"
+          asset_name: "release-v${{ env.version }}.zip"
+          asset_content_type: application/zip

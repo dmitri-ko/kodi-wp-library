@@ -1,63 +1,65 @@
 <?php
 /**
- * This file is part of the Kodi WordPress Library.
+ * AssetPath
  *
- * (c) BuzzDeveloper
+ * Manages asset paths and URLs for loading styles and scripts within the WordPress environment.
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @author     BuzzDeveloper
  * @package    Kodi
  * @subpackage AssetManagement
+ * @since      1.0.0
  */
 
-namespace DKO\DDNA\AssetManagement;
+namespace Kodi\AssetManagement;
 
 /**
- * Define the assets paths functionality
+ * Class AssetPath
  *
- * Make paths to different plugin resources.
+ * Provides functionality to create paths and URLs for different plugin or theme resources.
  *
- * @link https://buzzdeveloper.net
+ * This class helps to construct paths and URLs for various assets such as JavaScript and CSS files,
+ * ensuring consistency across the plugin or theme.
  *
- * @author BuzzDeveloper
+ * @since 1.0.0
  */
-class Asset_Path {
+class AssetPath {
 
 	/**
-	 * The resource name
+	 * The resource name.
 	 *
 	 * @var string
 	 */
-	private $name;
-	/**
-	 * The asset base directory name
-	 *
-	 * @var string
-	 */
-	private $base_dir_name;
-	/**
-	 * Path to asset root
-	 *
-	 * @var string
-	 */
-	private $path_to_asset;
-	/**
-	 * URLto asset root
-	 *
-	 * @var string
-	 */
-	private $url_to_asset;
-
+	private string $name;
 
 	/**
-	 * Create path maker
+	 * The base directory name for the assets.
+	 *
+	 * @var string
+	 */
+	private string $base_dir_name;
+
+	/**
+	 * Path to the asset root directory.
+	 *
+	 * @var string
+	 */
+	private string $path_to_asset;
+
+	/**
+	 * URL to the asset root directory.
+	 *
+	 * @var string
+	 */
+	private string $url_to_asset;
+
+	/**
+	 * Constructor
+	 *
+	 * Initializes the asset path instance with essential details for generating file paths and URLs.
 	 *
 	 * @param string $name          The asset name.
-	 * @param string $base_dir_name The asset base directoryname.
-	 * @param string $path_to_asset The asset root path.
-	 * @param string $url_to_asset  The asset root URL.
+	 * @param string $base_dir_name The base directory for assets.
+	 * @param string $path_to_asset The root directory path for the asset.
+	 * @param string $url_to_asset  The root URL for the asset.
 	 */
 	public function __construct( string $name = 'index', string $base_dir_name = 'assets', string $path_to_asset = '', string $url_to_asset = '' ) {
 		$this->name          = $name;
@@ -67,69 +69,77 @@ class Asset_Path {
 	}
 
 	/**
-	 * Get asset file name with full path
+	 * Get the full file path for the specified asset type.
 	 *
-	 * @param string $type        the asset type.
-	 * @param bool   $is_minified if the asset is minified.
+	 * Constructs the full path to the asset based on the provided type and minification flag.
 	 *
-	 * @return string
+	 * @param string $type        The asset type (e.g., 'css', 'js').
+	 * @param bool   $is_minified Whether the asset is minified.
+	 * @return string Full path to the asset file.
 	 */
 	public function get_full_filename( string $type, bool $is_minified = false ): string {
 		return trailingslashit( $this->path_to_asset ) . $this->get_asset_dir( $type ) . $this->get_asset_filename( $type, $is_minified );
 	}
 
 	/**
-	 * Get asset file name with full URL
+	 * Get the full URL for the specified asset type.
 	 *
-	 * @param string $type        the asset type.
-	 * @param bool   $is_minified if the asset is minified.
+	 * Constructs the URL for the asset based on the provided type and minification flag.
 	 *
-	 * @return string
+	 * @param string $type        The asset type (e.g., 'css', 'js').
+	 * @param bool   $is_minified Whether the asset is minified.
+	 * @return string Full URL to the asset file.
 	 */
-	public function get_url( $type, $is_minified = false ) {
+	public function get_url( string $type, bool $is_minified = false ): string {
 		return trailingslashit( $this->url_to_asset ) . $this->get_asset_dir( $type ) . $this->get_asset_filename( $type, $is_minified );
 	}
 
 	/**
-	 * Check if the asset exists
+	 * Check if the asset file exists.
 	 *
-	 * @param  string $type        the asset type.
-	 * @param  bool   $is_minified if the asset is minified.
-	 * @return bool
+	 * Checks whether the specified asset file exists on the filesystem.
+	 *
+	 * @param string $type        The asset type (e.g., 'css', 'js').
+	 * @param bool   $is_minified Whether the asset is minified.
+	 * @return bool True if the asset file exists, false otherwise.
 	 */
-	public function exists( $type, $is_minified = false ): bool {
+	public function exists( string $type, bool $is_minified = false ): bool {
 		return file_exists( $this->get_full_filename( $type, $is_minified ) );
 	}
 
 	/**
-	 * Get asset file name
+	 * Get the filename for the specified asset type.
 	 *
-	 * @param string $type        the asset type.
-	 * @param bool   $is_minified if the asset is minified.
+	 * Constructs the filename for the asset, including the type and minification suffix if applicable.
 	 *
-	 * @return string
+	 * @param string $type        The asset type (e.g., 'css', 'js').
+	 * @param bool   $is_minified Whether the asset is minified.
+	 * @return string Asset filename.
 	 */
 	protected function get_asset_filename( string $type, bool $is_minified ): string {
 		return $this->name . $this->get_asset_suffix( $type, $is_minified ) . '.' . $type;
 	}
 
 	/**
-	 * Get asset suffix
+	 * Get the suffix for the asset filename.
 	 *
-	 * @param string $type        the asset type.
-	 * @param bool   $is_minified if the asset is minified.
+	 * Generates the appropriate suffix for the filename based on the type and whether the file is minified.
 	 *
-	 * @return string
+	 * @param string $type        The asset type (e.g., 'css', 'js').
+	 * @param bool   $is_minified Whether the asset is minified.
+	 * @return string Suffix to append to the asset filename.
 	 */
 	protected function get_asset_suffix( string $type, bool $is_minified ): string {
 		return ( $is_minified ? '.min' : '' ) . ( 'php' === $type ? '.asset' : '' );
 	}
 
 	/**
-	 * Get asset directory
+	 * Get the directory for the specified asset type.
 	 *
-	 * @param  string $type the asset type.
-	 * @return string
+	 * Determines the appropriate subdirectory for the given asset type (e.g., 'scripts', 'css').
+	 *
+	 * @param string $type Asset type (e.g., 'css', 'js').
+	 * @return string Directory path for the asset type.
 	 */
 	protected function get_asset_dir( string $type ): string {
 		$subdirs = array(

@@ -1,58 +1,79 @@
 <?php
 /**
- * The JSON file Provider
+ * JSONProvider
  *
- * Handles theme settings file resolve.
+ * Provides functionality for reading data from JSON files.
  *
- * @since             1.0.0
- * @package           Kodi
- * @subpackage        Provider
+ * @package    Kodi
+ * @subpackage Provider
+ * @since      1.0.0
  */
 
 namespace Kodi\Provider;
 
+use Kodi\Provider\Interfaces\ProviderInterface;
+
 /**
- * Class that abstracts the processing of the different data sources
- * for site-level content and offers an API to work with them.
+ * Class JSONProvider
+ *
+ * Reads JSON data from a given file and provides it in array format.
+ *
+ * @since 1.0.0
  */
-class JSON_Provider implements Provider {
+class JSONProvider implements ProviderInterface {
 
 	/**
-	 * File name
+	 * Path to the JSON file.
 	 *
 	 * @var string
 	 */
-	protected $filename;
+	protected string $filename;
 
 	/**
 	 * Constructor
 	 *
-	 * @param  string $filename File name.
+	 * Initializes the JSONProvider with a file path.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $filename Path to the JSON file.
 	 */
 	public function __construct( string $filename ) {
 		$this->filename = $filename;
 	}
 
 	/**
-	 * Processes a file and returns an array with its contents, or a void array if none found.
+	 * Read data from the JSON file.
 	 *
-	 * @return array
+	 * This method reads the content of the provided JSON file and returns it as an array.
+	 * If the file does not exist or cannot be decoded properly, it returns an empty array.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array Decoded content of the JSON file.
 	 */
 	private function read_from_file(): array {
 		$content = array();
+
 		if ( ! empty( $this->filename ) && file_exists( $this->filename ) ) {
 			$decoded_file = wp_json_file_decode( $this->filename, array( 'associative' => true ) );
+
 			if ( is_array( $decoded_file ) ) {
 				$content = $decoded_file;
 			}
 		}
+
 		return $content;
 	}
 
 	/**
-	 * Provide data
+	 * Get data from the JSON file.
 	 *
-	 * @return array
+	 * Provides the decoded JSON data as an associative array.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array The JSON data as an associative array.
 	 */
 	public function get_data(): array {
 		return $this->read_from_file();
