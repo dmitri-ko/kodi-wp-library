@@ -43,6 +43,7 @@ jobs:
           git push origin "v${{ env.version }}"
 
       - name: Create GitHub release
+        id: create_release
         uses: actions/create-release@latest
         with:
           tag_name: "v${{ env.version }}"
