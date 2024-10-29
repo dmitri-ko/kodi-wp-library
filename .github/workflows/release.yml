@@ -15,7 +15,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0' # specify your PHP version
+          php-version: '8.0' # Specify your PHP version
 
       - name: Install dependencies
         run: composer install --no-scripts --no-progress --no-suggest
@@ -26,16 +26,18 @@ jobs:
           VERSION=$(jq -r '.version' composer.json)
           echo "version=$VERSION" >> $GITHUB_ENV
 
-      - name: Check if tag exists
+      - name: Check if tag exists on remote
         id: tag_check
         run: |
-          if git rev-parse "v${{ env.version }}" >/dev/null 2>&1; then
+          if git ls-remote --tags origin | grep -q "refs/tags/v${{ env.version }}$"; then
             echo "Tag v${{ env.version }} already exists."
-            exit 0
+            echo "tag_exists=true" >> $GITHUB_ENV
+          else
+            echo "tag_exists=false" >> $GITHUB_ENV
           fi
 
       - name: Create release package
-        if: steps.tag_check.outcome == 'success'
+        if: env.tag_exists == 'false'
         run: |
           mkdir release
           cp -R src release/src
@@ -45,7 +47,7 @@ jobs:
           cd ..
 
       - name: Create Git tag
-        if: steps.tag_check.outcome == 'success'
+        if: env.tag_exists == 'false'
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
@@ -53,7 +55,7 @@ jobs:
           git push origin "v${{ env.version }}"
 
       - name: Create GitHub release
-        if: steps.tag_check.outcome == 'success'
+        if: env.tag_exists == 'false'
         id: create_release
         uses: actions/create-release@v1
         with:
@@ -66,7 +68,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Release Asset
-        if: steps.tag_check.outcome == 'success'
+        if: env.tag_exists == 'false'
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
