@@ -26,7 +26,16 @@ jobs:
           VERSION=$(jq -r '.version' composer.json)
           echo "version=$VERSION" >> $GITHUB_ENV
 
+      - name: Check if tag exists
+        id: tag_check
+        run: |
+          if git rev-parse "v${{ env.version }}" >/dev/null 2>&1; then
+            echo "Tag v${{ env.version }} already exists."
+            exit 0
+          fi
+
       - name: Create release package
+        if: steps.tag_check.outcome == 'success'
         run: |
           mkdir release
           cp -R src release/src
@@ -36,6 +45,7 @@ jobs:
           cd ..
 
       - name: Create Git tag
+        if: steps.tag_check.outcome == 'success'
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
@@ -43,8 +53,9 @@ jobs:
           git push origin "v${{ env.version }}"
 
       - name: Create GitHub release
+        if: steps.tag_check.outcome == 'success'
         id: create_release
-        uses: actions/create-release@latest
+        uses: actions/create-release@v1
         with:
           tag_name: "v${{ env.version }}"
           release_name: "Release v${{ env.version }}"
@@ -55,9 +66,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Release Asset
+        if: steps.tag_check.outcome == 'success'
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: "./release-v${{ env.version }}.zip"
           asset_name: "release-v${{ env.version }}.zip"
           asset_content_type: application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
