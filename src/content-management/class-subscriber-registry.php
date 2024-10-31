@@ -20,7 +20,6 @@ use Kodi\AssetManagement\Default_Asset_Loader;
 use Kodi\EventManagement\Interfaces\Subscriber_Interface;
 use Kodi\EventManagement\Interfaces\SubscriberInterface;
 use Kodi\Settings\Sanitized_Settings;
-use Kodi\Settings\SanitizedSettings;
 use Kodi\Subscriber\Admin\Admin_Assets_Subscriber;
 use Kodi\Subscriber\Frontend\Frontend_Assets_Subscriber;
 

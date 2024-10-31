@@ -116,6 +116,7 @@ class Theme_Content_Provider implements Content_Data_Interface {
 
 		$settings = $theme_settings_manager->load_settings( $file_path, $ruleset );
 		$this->subscriber_registry->register_subscribers( $this->theme_subscribers, $settings );
+		$this->shortcode_registry->register_shortcodes( $this->theme_subscribers, $settings );
 
 		$this->is_loaded = true;
 	}
