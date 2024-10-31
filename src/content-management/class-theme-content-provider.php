@@ -73,16 +73,25 @@ class ThemeContentProvider implements ContentDataInterface {
 	private array $theme_shortcodes = array();
 
 	/**
+	 * Default settings for the theme configuration.
+	 *
+	 * @var array
+	 */
+	private array $default_settings = array();
+
+	/**
 	 * Constructor
 	 *
-	 * Initializes the registries with given subscribers and shortcodes.
+	 * Initializes the registries with given subscribers, shortcodes, and default settings.
 	 *
 	 * @param array $theme_subscribers List of theme subscribers.
 	 * @param array $theme_shortcodes  List of theme shortcodes.
+	 * @param array $default_settings  Default settings for theme configuration.
 	 */
-	public function __construct( array $theme_subscribers, array $theme_shortcodes ) {
+	public function __construct( array $theme_subscribers, array $theme_shortcodes, array $default_settings ) {
 		$this->theme_subscribers   = $theme_subscribers;
 		$this->theme_shortcodes    = $theme_shortcodes;
+		$this->default_settings    = $default_settings;
 		$this->subscriber_registry = new SubscriberRegistry();
 		$this->shortcode_registry  = new ShortcodeRegistry();
 	}
@@ -103,7 +112,7 @@ class ThemeContentProvider implements ContentDataInterface {
 			'version',
 			'name',
 			'slug',
-			'settings_key' => array(),
+			'settings' => $this->default_settings,
 		);
 
 		$settings = $theme_settings_manager->load_settings( $file_path, $ruleset );
@@ -131,6 +140,8 @@ class ThemeContentProvider implements ContentDataInterface {
 	/**
 	 * Retrieve the theme's event subscribers.
 	 *
+	 * Ensures configuration is loaded before retrieving subscribers.
+	 *
 	 * @since 1.0.0
 	 * @return SubscriberInterface[] Array of subscribers.
 	 */
@@ -143,6 +154,8 @@ class ThemeContentProvider implements ContentDataInterface {
 
 	/**
 	 * Retrieve the theme's shortcodes.
+	 *
+	 * Ensures configuration is loaded before retrieving shortcodes.
 	 *
 	 * @since 1.0.0
 	 * @return array Array of shortcodes.

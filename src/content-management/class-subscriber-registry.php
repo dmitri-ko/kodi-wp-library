@@ -53,7 +53,7 @@ class SubscriberRegistry {
 				if ( $settings->has_support( $setting, $option ) ) {
 					try {
 						$this->add_subscriber( $subscriber );
-					} catch ( \InvalidArgumentException $th ) {
+					} catch ( \TypeError $th ) {
 						error_log( $th->getMessage() ); // TODO: implement error handling.
 					}
 				}
