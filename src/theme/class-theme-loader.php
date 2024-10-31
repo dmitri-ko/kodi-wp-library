@@ -21,7 +21,6 @@ namespace Kodi\Theme;
 use Kodi\ContentManagement\Interfaces\Content_Data_Interface;
 use Kodi\EventManagement\Event_Manager;
 use Kodi\Shortcodes\Shortcode_Manager;
-use Kodi\Theme\Interfaces\Theme_Interface;
 
 /**
  * Class Theme_Loader
@@ -30,7 +29,7 @@ use Kodi\Theme\Interfaces\Theme_Interface;
  *
  * @since 1.0.0
  */
-class Theme_Loader implements Theme_Interface {
+class Theme_Loader {
 
 	/**
 	 * Event manager instance for managing theme events.
@@ -54,13 +53,6 @@ class Theme_Loader implements Theme_Interface {
 	private $is_loaded = false;
 
 	/**
-	 * The theme name.
-	 *
-	 * @var string
-	 */
-	private $theme_name;
-
-	/**
 	 * The theme content configurator.
 	 *
 	 * @var Content_Data_Interface
@@ -72,14 +64,11 @@ class Theme_Loader implements Theme_Interface {
 	 *
 	 * Initializes the theme with the given name, configurator, event manager, and shortcode manager.
 	 *
-	 * @since 1.0.0
-	 * @param string                 $theme_name             The theme name.
 	 * @param Content_Data_Interface $content_data_interface Content configurator for theme settings.
 	 * @param Event_Manager          $event_manager          Event manager for handling theme events.
 	 * @param Shortcode_Manager      $shortcode_manager      Shortcode manager for handling theme shortcodes.
 	 */
-	public function __construct( string $theme_name, Content_Data_Interface $content_data_interface, Event_Manager $event_manager, Shortcode_Manager $shortcode_manager ) {
-		$this->theme_name             = $theme_name;
+	public function __construct( Content_Data_Interface $content_data_interface, Event_Manager $event_manager, Shortcode_Manager $shortcode_manager ) {
 		$this->content_data_interface = $content_data_interface;
 		$this->event_manager          = $event_manager;
 		$this->shortcode_manager      = $shortcode_manager;
