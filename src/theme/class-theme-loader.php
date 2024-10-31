@@ -1,37 +1,50 @@
 <?php
 /**
- * WP_Theme Class
+ * ThemeLoader Class
  *
- * Provides an implementation of the ThemeInterface to load and manage a WordPress theme.
+ * This file contains the ThemeLoader class, which is responsible for loading
+ * and initializing a WordPress theme, including registering event subscribers
+ * and shortcodes. It ensures the theme is fully prepared for the WordPress
+ * environment by utilizing EventManager and ShortcodeManager services.
  *
- * @package    Kodi
+ * @package Kodi
  * @subpackage Theme
- * @since      1.0.0
+ * @since 1.0.0
+ * @version 1.0.0
+ * @author  BuzzDeveloper
+ * @license GPL-2.0-or-later
+ * @link    https://buzzdeveloper.net
  */
 
 namespace Kodi\Theme;
 
 use Kodi\ContentManagement\Interfaces\ContentDataInterface;
 use Kodi\EventManagement\EventManager;
+use Kodi\Shortcodes\ShortcodeManager;
 use Kodi\Theme\Interfaces\ThemeInterface;
 
 /**
- * Class WP_Theme
+ * Class ThemeLoader
  *
- * A concrete implementation of ThemeInterface to manage the loading and configuration
- * of a WordPress theme. This class is responsible for initializing theme settings,
- * managing event subscribers, and registering shortcodes.
+ * Loads and initializes the WordPress theme, including subscribers and shortcodes.
  *
  * @since 1.0.0
  */
 class ThemeLoader implements ThemeInterface {
 
 	/**
-	 * The plugin event manager.
+	 * Event manager instance for managing theme events.
 	 *
 	 * @var EventManager
 	 */
 	private $event_manager;
+
+	/**
+	 * Shortcode manager instance for managing shortcodes.
+	 *
+	 * @var ShortcodeManager
+	 */
+	private $shortcode_manager;
 
 	/**
 	 * Flag to track if the theme is loaded.
@@ -48,25 +61,27 @@ class ThemeLoader implements ThemeInterface {
 	private $theme_name;
 
 	/**
-	 * The theme configurator.
+	 * The theme content configurator.
 	 *
 	 * @var ContentDataInterface
 	 */
 	private $content_data_interface;
 
 	/**
-	 * WP_Theme constructor.
+	 * ThemeLoader constructor.
 	 *
-	 * Initializes the theme with the given name, configurator, and event manager.
+	 * Initializes the theme with the given name, configurator, event manager, and shortcode manager.
 	 *
-	 * @param string               $theme_name              The theme name.
-	 * @param ContentDataInterface $content_data_interface  Configurator for theme settings.
-	 * @param EventManager         $event_manager          Event manager for theme event handling.
+	 * @param string               $theme_name             The theme name.
+	 * @param ContentDataInterface $content_data_interface Content configurator for theme settings.
+	 * @param EventManager         $event_manager          Event manager for handling theme events.
+	 * @param ShortcodeManager     $shortcode_manager      Shortcode manager for handling theme shortcodes.
 	 */
-	public function __construct( string $theme_name, ContentDataInterface $content_data_interface, EventManager $event_manager ) {
+	public function __construct( string $theme_name, ContentDataInterface $content_data_interface, EventManager $event_manager, ShortcodeManager $shortcode_manager ) {
 		$this->theme_name             = $theme_name;
 		$this->content_data_interface = $content_data_interface;
 		$this->event_manager          = $event_manager;
+		$this->shortcode_manager      = $shortcode_manager;
 	}
 
 	/**
@@ -81,7 +96,7 @@ class ThemeLoader implements ThemeInterface {
 	/**
 	 * Load the theme into WordPress.
 	 *
-	 * Initializes theme by loading subscribers and shortcodes
+	 * Initializes the theme by loading subscribers and shortcodes,
 	 * and sets the loaded flag to true once completed.
 	 *
 	 * @return void
@@ -93,14 +108,13 @@ class ThemeLoader implements ThemeInterface {
 
 		$this->load_subscribers();
 		$this->load_shortcodes();
-
 		$this->is_loaded = true;
 	}
 
 	/**
-	 * Load event subscribers from the configurator.
+	 * Load event subscribers from the content configurator.
 	 *
-	 * This method iterates over the subscribers provided by the configurator
+	 * This method iterates over subscribers provided by the configurator
 	 * and registers each with the event manager.
 	 *
 	 * @return void
@@ -112,28 +126,16 @@ class ThemeLoader implements ThemeInterface {
 	}
 
 	/**
-	 * Load shortcodes from the configurator.
+	 * Load shortcodes from the content configurator.
 	 *
-	 * This method retrieves shortcodes from the configurator and registers each
-	 * one using the register_shortcode() method.
+	 * This method iterates over shortcodes provided by the configurator
+	 * and registers each with the shortcode manager.
 	 *
 	 * @return void
 	 */
 	private function load_shortcodes(): void {
 		foreach ( $this->content_data_interface->get_shortcodes() as $shortcode ) {
-			$this->register_shortcode( $shortcode );
+			$this->shortcode_manager->add_shortcode( $shortcode );
 		}
-	}
-
-	/**
-	 * Register the given shortcode with the WordPress shortcode API.
-	 *
-	 * This method registers the shortcode by using the provided slug and handler.
-	 *
-	 * @param array $shortcode An associative array containing 'slug' and 'handle' for the shortcode.
-	 * @return void
-	 */
-	private function register_shortcode( array $shortcode ): void {
-		add_shortcode( $shortcode['slug'], $shortcode['handle'] );
 	}
 }

@@ -26,8 +26,6 @@ class ShortcodeRegistry {
 	 * @return array Array of shortcodes.
 	 */
 	public function get_shortcodes(): array {
-		return array(
-			'example_shortcode' => 'example_shortcode_function',
-		);
+		return array();
 	}
 }

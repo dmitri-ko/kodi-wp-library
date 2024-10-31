@@ -1,18 +1,25 @@
 <?php
 /**
- * ThemeContentProvider
+ * ThemeContentProvider Class
  *
- * Manages WordPress theme settings, subscribers, and shortcodes.
+ * Provides a unified interface to manage theme settings, subscribers, and shortcodes.
+ * This class handles loading, validating, and configuring theme settings from a JSON file,
+ * as well as registering subscribers and shortcodes.
  *
- * @package    Kodi
+ * @package Kodi
  * @subpackage ContentManagement
- * @since      1.0.0
+ * @since 1.0.0
+ * @version 1.0.0
+ * @license GPL-2.0-or-later
+ * @link    https://buzzdeveloper.net
  */
 
 namespace Kodi\ContentManagement;
 
 use Kodi\ContentManagement\Interfaces\ContentDataInterface;
 use Kodi\EventManagement\SubscriberInterface;
+use Kodi\ContentManagement\SubscriberRegistry;
+use Kodi\ContentManagement\ShortcodeRegistry;
 
 /**
  * Class ThemeContentProvider
@@ -52,11 +59,30 @@ class ThemeContentProvider implements ContentDataInterface {
 	private ShortcodeRegistry $shortcode_registry;
 
 	/**
+	 * Theme subscribers array.
+	 *
+	 * @var array
+	 */
+	private array $theme_subscribers = array();
+
+	/**
+	 * Theme shortcodes array.
+	 *
+	 * @var array
+	 */
+	private array $theme_shortcodes = array();
+
+	/**
 	 * Constructor
 	 *
-	 * Initializes the registries.
+	 * Initializes the registries with given subscribers and shortcodes.
+	 *
+	 * @param array $theme_subscribers List of theme subscribers.
+	 * @param array $theme_shortcodes  List of theme shortcodes.
 	 */
-	public function __construct() {
+	public function __construct( array $theme_subscribers, array $theme_shortcodes ) {
+		$this->theme_subscribers   = $theme_subscribers;
+		$this->theme_shortcodes    = $theme_shortcodes;
 		$this->subscriber_registry = new SubscriberRegistry();
 		$this->shortcode_registry  = new ShortcodeRegistry();
 	}
@@ -81,7 +107,7 @@ class ThemeContentProvider implements ContentDataInterface {
 		);
 
 		$settings = $theme_settings_manager->load_settings( $file_path, $ruleset );
-		$this->subscriber_registry->register_default_subscribers( $settings );
+		$this->subscriber_registry->register_subscribers( $this->theme_subscribers, $settings );
 
 		$this->is_loaded = true;
 	}
@@ -122,6 +148,9 @@ class ThemeContentProvider implements ContentDataInterface {
 	 * @return array Array of shortcodes.
 	 */
 	public function get_shortcodes(): array {
+		if ( ! $this->is_loaded ) {
+			$this->configure();
+		}
 		return $this->shortcode_registry->get_shortcodes();
 	}
 }
