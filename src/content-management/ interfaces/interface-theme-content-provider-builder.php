@@ -1,55 +1,46 @@
 <?php
 /**
- * ThemeContentProviderBuilderInterface
+ * Theme_Content_Provider_Builder_Interface
  *
  * Defines the builder interface for constructing Theme_Content_Provider instances.
  *
- * @package Kodi
+ * @package    Kodi
  * @subpackage ContentManagement
- * @since 1.0.0
+ * @since      1.0.0
+ * @version    1.0.0
+ * @license    GPL-2.0-or-later
+ * @link       https://buzzdeveloper.net
+ * @author     BuzzDeveloper
  */
 
 namespace Kodi\ContentManagement\Interfaces;
 
-use Kodi\ContentManagement\ThemeContentProvider;
+use Kodi\ContentManagement\Theme_Content_Provider;
+use Kodi\ContentManagement\Interfaces\Theme_Content_Configuration_Interface;
 
 /**
- * Interface ThemeContentProviderBuilderInterface
+ * Interface Theme_Content_Provider_Builder_Interface
  *
  * Specifies methods for building a Theme_Content_Provider.
  *
  * @since 1.0.0
  */
-interface ThemeContentProviderBuilderInterface {
+interface Theme_Content_Provider_Builder_Interface {
 
 	/**
-	 * Sets theme subscribers.
+	 * Set the theme content configurator.
 	 *
-	 * @param array $subscribers List of theme subscribers.
-	 * @return ThemeContentProviderBuilderInterface
+	 * @since 1.0.0
+	 * @param Theme_Content_Configuration_Interface $configurator The content configurator instance.
+	 * @return Content_Provider_Builder_Interface
 	 */
-	public function set_theme_subscribers( array $subscribers ): self;
+	public function set_theme_content_configurator( Theme_Content_Configuration_Interface $configurator ): self;
 
 	/**
-	 * Sets theme shortcodes.
+	 * Build and return an instance of Theme_Content_Provider.
 	 *
-	 * @param array $shortcodes List of theme shortcodes.
-	 * @return ThemeContentProviderBuilderInterface
+	 * @since 1.0.0
+	 * @return Theme_Content_Provider
 	 */
-	public function set_theme_shortcodes( array $shortcodes ): self;
-
-	/**
-	 * Sets default theme settings.
-	 *
-	 * @param array $settings Default settings for the theme configuration.
-	 * @return ThemeContentProviderBuilderInterface
-	 */
-	public function set_default_settings( array $settings ): self;
-
-	/**
-	 * Builds and returns an instance of ThemeContentProvider.
-	 *
-	 * @return ThemeContentProvider
-	 */
-	public function build(): ThemeContentProvider;
+	public function build(): Theme_Content_Provider;
 }

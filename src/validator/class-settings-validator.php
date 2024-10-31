@@ -1,27 +1,31 @@
 <?php
 /**
- * SettingsValidator
+ * Settings_Validator
  *
  * Provides functionality for validating WordPress settings based on predefined rulesets.
  *
  * @package    Kodi
  * @subpackage Validator
  * @since      1.0.0
+ * @version    1.0.0
+ * @license    GPL-2.0-or-later
+ * @link       https://buzzdeveloper.net
+ * @author     BuzzDeveloper
  */
 
 namespace Kodi\Validator;
 
-use Kodi\Validator\Interfaces\ValidatorInterface;
+use Kodi\Validator\Interfaces\Validator_Interface;
 
 /**
- * Class SettingsValidator
+ * Class Settings_Validator
  *
  * Validates provided settings against a set of predefined rules.
  * Ensures that all settings and their options conform to the allowed structure.
  *
  * @since 1.0.0
  */
-class SettingsValidator implements ValidatorInterface {
+class Settings_Validator implements Validator_Interface {
 
 	/**
 	 * Key for settings within the ruleset.

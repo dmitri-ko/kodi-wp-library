@@ -1,42 +1,46 @@
 <?php
 /**
- * SanitizedSettings
+ * Sanitized_Settings Class
  *
- * Handles the loading, validation, and retrieval of settings from a provider.
+ * Provides functionality for theme, assets, and event management.
  *
  * @package    Kodi
- * @subpackage Settings
+ * @subpackage Various
  * @since      1.0.0
+ * @version    1.0.0
+ * @license    GPL-2.0-or-later
+ * @link       https://buzzdeveloper.net
+ * @author     BuzzDeveloper
  */
 
 namespace Kodi\Settings;
 
-use Kodi\Provider\Interfaces\ProviderInterface;
-use Kodi\Validator\Interfaces\ValidatorInterface;
-use Kodi\Settings\Interfaces\SettingsInterface;
+use Kodi\Provider\Interfaces\Provider_Interface;
+use Kodi\Validator\Interfaces\Validator_Interface;
+use Kodi\Settings\Interfaces\Settings_Interface;
 
 /**
- * Class SanitizedSettings
+ * Class Sanitized_Settings
  *
  * Loads settings from a data provider, validates them using a validator, and provides access to the sanitized settings.
  *
  * @since 1.0.0
  */
-class SanitizedSettings implements SettingsInterface {
+class Sanitized_Settings implements Settings_Interface {
 
 	/**
 	 * Data provider instance.
 	 *
-	 * @var ProviderInterface
+	 * @var Provider_Interface
 	 */
-	private ProviderInterface $provider;
+	private Provider_Interface $provider;
 
 	/**
 	 * Validator instance.
 	 *
-	 * @var ValidatorInterface
+	 * @var Validator_Interface
 	 */
-	private ValidatorInterface $validator;
+	private Validator_Interface $validator;
 
 	/**
 	 * Storage for validated data.
@@ -51,12 +55,11 @@ class SanitizedSettings implements SettingsInterface {
 	 * Initializes the settings with a data provider and a validator.
 	 * Loads the data and sanitizes it based on the provided rules.
 	 *
-	 * @param ProviderInterface  $provider  The data provider instance.
-	 * @param ValidatorInterface $validator The validator instance.
-	 *
 	 * @since 1.0.0
+	 * @param Provider_Interface  $provider  The data provider instance.
+	 * @param Validator_Interface $validator The validator instance.
 	 */
-	public function __construct( ProviderInterface $provider, ValidatorInterface $validator ) {
+	public function __construct( Provider_Interface $provider, Validator_Interface $validator ) {
 		$this->provider  = $provider;
 		$this->validator = $validator;
 		$this->load();
@@ -88,7 +91,6 @@ class SanitizedSettings implements SettingsInterface {
 	 * Returns all sanitized settings as an associative array.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @return array The array of sanitized settings.
 	 */
 	public function get_raw_data(): array {
@@ -102,7 +104,6 @@ class SanitizedSettings implements SettingsInterface {
 	 * If the property is not found or is not a string, an empty string is returned.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @param string $property_name The name of the property to retrieve.
 	 * @return string The value of the property, or an empty string if not found.
 	 */
@@ -118,7 +119,6 @@ class SanitizedSettings implements SettingsInterface {
 	 * Determines whether the given setting has the specified option and that it is not empty.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @param string $setting The name of the setting.
 	 * @param string $option  The name of the option within the setting.
 	 * @return bool True if the setting has support for the option, false otherwise.
@@ -133,7 +133,6 @@ class SanitizedSettings implements SettingsInterface {
 	 * Returns an associative array representing the setting, or an empty array if the setting is not found.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @param string $setting The name of the setting.
 	 * @return array The data of the specified setting, or an empty array if not found.
 	 */
@@ -147,7 +146,6 @@ class SanitizedSettings implements SettingsInterface {
 	 * Returns the value of an option within a setting if it exists, otherwise returns false.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @param string $setting The name of the setting.
 	 * @param string $option  The name of the option within the setting.
 	 * @return mixed The value of the option, or false if not found.

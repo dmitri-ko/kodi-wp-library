@@ -1,27 +1,31 @@
 <?php
 /**
- * EventManager
+ * File name: class-event-manager.php
  *
- * Manages WordPress hooks (actions and filters) using the WordPress Plugin API.
+ * Provides functionality for theme, assets, and event management.
  *
- * @package    Kodi
- * @subpackage EventManagement
- * @since      1.0.0
+ * @package Kodi
+ * @subpackage Various
+ * @since 1.0.0
+ * @version 1.0.0
+ * @license GPL-2.0-or-later
+ * @link    https://buzzdeveloper.net
+ * @author  BuzzDeveloper
  */
 
 namespace Kodi\EventManagement;
 
-use Kodi\EventManagement\Interfaces\SubscriberInterface;
+use Kodi\EventManagement\Interfaces\Subscriber_Interface;
 
 /**
- * Class EventManager
+ * Class Event_Manager
  *
  * Manages event subscriptions, actions, and filters in WordPress.
  * Provides functionality to add, remove, and manage hook callbacks.
  *
  * @since 1.0.0
  */
-class EventManager {
+class Event_Manager {
 
 	/**
 	 * Adds a callback to a specific hook in the WordPress Plugin API.
@@ -47,10 +51,10 @@ class EventManager {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param SubscriberInterface $subscriber The event subscriber.
+	 * @param Subscriber_Interface $subscriber The event subscriber.
 	 * @return void
 	 */
-	public function add_subscriber( SubscriberInterface $subscriber ): void {
+	public function add_subscriber( Subscriber_Interface $subscriber ): void {
 		foreach ( $subscriber->get_subscribed_events() as $hook_name => $parameters ) {
 			$this->add_subscriber_callback( $subscriber, $hook_name, $parameters );
 		}
@@ -132,10 +136,10 @@ class EventManager {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param SubscriberInterface $subscriber The event subscriber.
+	 * @param Subscriber_Interface $subscriber The event subscriber.
 	 * @return void
 	 */
-	public function remove_subscriber( SubscriberInterface $subscriber ): void {
+	public function remove_subscriber( Subscriber_Interface $subscriber ): void {
 		foreach ( $subscriber->get_subscribed_events() as $hook_name => $parameters ) {
 			$this->remove_subscriber_callback( $subscriber, $hook_name, $parameters );
 		}
@@ -146,12 +150,12 @@ class EventManager {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param SubscriberInterface $subscriber The event subscriber.
-	 * @param string              $hook_name  The hook name.
-	 * @param mixed               $parameters Hook parameters (callback, priority, accepted args).
+	 * @param Subscriber_Interface $subscriber The event subscriber.
+	 * @param string               $hook_name  The hook name.
+	 * @param mixed                $parameters Hook parameters (callback, priority, accepted args).
 	 * @return void
 	 */
-	private function add_subscriber_callback( SubscriberInterface $subscriber, string $hook_name, $parameters ): void {
+	private function add_subscriber_callback( Subscriber_Interface $subscriber, string $hook_name, $parameters ): void {
 		if ( is_string( $parameters ) ) {
 			$this->add_callback( $hook_name, array( $subscriber, $parameters ) );
 		} elseif ( is_array( $parameters ) && isset( $parameters[0] ) ) {
@@ -164,12 +168,12 @@ class EventManager {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param SubscriberInterface $subscriber The event subscriber.
-	 * @param string              $hook_name  The hook name.
-	 * @param mixed               $parameters Hook parameters (callback, priority).
+	 * @param Subscriber_Interface $subscriber The event subscriber.
+	 * @param string               $hook_name  The hook name.
+	 * @param mixed                $parameters Hook parameters (callback, priority).
 	 * @return void
 	 */
-	private function remove_subscriber_callback( SubscriberInterface $subscriber, string $hook_name, $parameters ): void {
+	private function remove_subscriber_callback( Subscriber_Interface $subscriber, string $hook_name, $parameters ): void {
 		if ( is_string( $parameters ) ) {
 			$this->remove_callback( $hook_name, array( $subscriber, $parameters ) );
 		} elseif ( is_array( $parameters ) && isset( $parameters[0] ) ) {

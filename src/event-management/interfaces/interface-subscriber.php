@@ -1,25 +1,29 @@
 <?php
 /**
- * SubscriberInterface
+ * File name: interface-subscriber.php
  *
- * Defines an interface for event subscribers in the WordPress environment.
+ * Provides functionality for theme, assets, and event management.
  *
- * @package    Kodi
- * @subpackage EventManagement
- * @since      1.0.0
+ * @package Kodi
+ * @subpackage Various
+ * @since 1.0.0
+ * @version 1.0.0
+ * @license GPL-2.0-or-later
+ * @link    https://buzzdeveloper.net
+ * @author  BuzzDeveloper
  */
 
 namespace Kodi\EventManagement\Interfaces;
 
 /**
- * Interface SubscriberInterface
+ * Interface Subscriber_Interface
  *
  * Represents an event subscriber that hooks into WordPress actions or filters.
  * Classes implementing this interface should provide a list of subscribed events.
  *
  * @since 1.0.0
  */
-interface SubscriberInterface {
+interface Subscriber_Interface {
 
 	/**
 	 * Get the list of events to which the subscriber should be subscribed.

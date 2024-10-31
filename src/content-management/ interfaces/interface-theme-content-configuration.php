@@ -1,27 +1,28 @@
 <?php
 /**
- * Content_Configuration Interface
+ * Content_Configuration_Interface
  *
  * Provides access to configuration options for theme-related subscribers, shortcodes, and settings.
  *
- * @package Kodi
+ * @package    Kodi
  * @subpackage ContentManagement
- * @since 1.0.0
- * @version 1.0.0
- * @license GPL-2.0-or-later
- * @author  BuzzDeveloper
+ * @since      1.0.0
+ * @version    1.0.0
+ * @license    GPL-2.0-or-later
+ * @link       https://buzzdeveloper.net
+ * @author     BuzzDeveloper
  */
 
 namespace Kodi\ContentManagement\Interfaces;
 
 /**
- * Interface ContentConfigurationInterface
+ * Interface Content_Configuration_Interface
  *
  * Specifies methods for retrieving configuration data related to subscribers, shortcodes, and theme settings.
  *
  * @since 1.0.0
  */
-interface ContentConfigurationInterface {
+interface Theme_Content_Configuration_Interface {
 
 	/**
 	 * Retrieve configuration options for event subscribers.

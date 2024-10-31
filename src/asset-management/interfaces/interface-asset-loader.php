@@ -1,18 +1,22 @@
 <?php
 /**
- * AssetLoaderInterface
+ * File name: interface-asset-loader.php
  *
- * Interface for registering and enqueuing assets (styles and scripts) in WordPress themes or plugins.
+ * Provides functionality for theme, assets, and event management.
  *
- * @package     Kodi
- * @subpackage AssetManagement
- * @since      1.0.0
+ * @package Kodi
+ * @subpackage Various
+ * @since 1.0.0
+ * @version 1.0.0
+ * @license GPL-2.0-or-later
+ * @link    https://buzzdeveloper.net
+ * @author  BuzzDeveloper
  */
 
- namespace Kodi\AssetManagement\Interfaces;
+namespace Kodi\AssetManagement\Interfaces;
 
 /**
- * Interface AssetLoaderInterface
+ * Interface Asset_Loader_Interface
  *
  * Provides methods for registering and enqueuing styles and scripts for a WordPress theme or plugin.
  *
@@ -22,7 +26,7 @@
  *
  * @since 1.0.0
  */
-interface AssetLoaderInterface {
+interface Asset_Loader_Interface {
 	/**
 	 * Registers styles.
 	 */

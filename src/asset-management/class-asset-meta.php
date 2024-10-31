@@ -1,27 +1,28 @@
 <?php
 /**
- * AssetMeta
+ * File name: class-asset-meta.php
  *
- * Handles retrieval and parsing of metadata for assets in the WordPress environment.
+ * Provides functionality for theme, assets, and event management.
  *
- * This class provides functionality to retrieve metadata, such as dependencies and versioning,
- * for JavaScript or CSS assets.
- *
- * @package    Kodi
- * @subpackage AssetManagement
- * @since      1.0.0
+ * @package Kodi
+ * @subpackage Various
+ * @since 1.0.0
+ * @version 1.0.0
+ * @license GPL-2.0-or-later
+ * @link    https://buzzdeveloper.net
+ * @author  BuzzDeveloper
  */
 
 namespace Kodi\AssetManagement;
 
 /**
- * Class AssetMeta
+ * Class Asset_Meta
  *
  * Retrieves asset metadata, such as dependencies and version, from specified files.
  *
  * @since 1.0.0
  */
-class AssetMeta {
+class Asset_Meta {
 
 	/**
 	 * Path to the metadata file.
@@ -33,7 +34,7 @@ class AssetMeta {
 	/**
 	 * Constructor
 	 *
-	 * Initializes the AssetMeta object with the path to the metadata file.
+	 * Initializes the Asset_Meta object with the path to the metadata file.
 	 *
 	 * @param string $file_path Path to the metadata file.
 	 */
@@ -54,13 +55,13 @@ class AssetMeta {
 	 */
 	public function get_assets(): array {
 		if ( ! is_readable( $this->file_path ) ) {
-			throw new \RuntimeException( sprintf( 'Asset metadata file %s is not readable.', $this->file_path ) );
+			throw new \RuntimeException( esc_html( sprintf( 'Asset metadata file %s is not readable.', $this->file_path ) ) );
 		}
 
 		$assets = include $this->file_path;
 
 		if ( ! is_array( $assets ) || ! isset( $assets['dependencies'], $assets['version'] ) ) {
-			throw new \RuntimeException( sprintf( 'Asset metadata file %s is not valid.', $this->file_path ) );
+			throw new \RuntimeException( esc_html( sprintf( 'Asset metadata file %s is not valid.', $this->file_path ) ) );
 		}
 
 		return $assets;

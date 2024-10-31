@@ -1,43 +1,47 @@
 <?php
 /**
- * DefaultAssetLoader
+ * File name: class-default-asset-loader.php
  *
- * Provides functionality to register and enqueue theme or plugin assets (styles and scripts).
+ * Provides functionality for theme, assets, and event management.
  *
- * @package    Kodi
- * @subpackage AssetManagement
- * @since      1.0.0
+ * @package Kodi
+ * @subpackage Various
+ * @since 1.0.0
+ * @version 1.0.0
+ * @license GPL-2.0-or-later
+ * @link    https://buzzdeveloper.net
+ * @author  BuzzDeveloper
  */
 
 namespace Kodi\AssetManagement;
 
-use Kodi\AssetManagement\AssetMeta;
-use Kodi\AssetManagement\AssetPath;
-use Kodi\AssetManagement\Interfaces\AssetLoaderInterface;
+use Kodi\AssetManagement\Asset_Meta;
+use Kodi\AssetManagement\Asset_Path;
+use Kodi\AssetManagement\Interfaces\Asset_Loader_Interface;
 
 /**
- * Class DefaultAssetLoader
+ * Class Default_Asset_Loader
  *
- * Implements AssetLoaderInterface to register and enqueue styles and scripts
+ * Implements Asset_Loader_Interface to register and enqueue styles and scripts
  * using provided paths, names, and versioning.
  *
  * @since 1.0.0
  */
-class DefaultAssetLoader implements AssetLoaderInterface {
+class Default_Asset_Loader implements Asset_Loader_Interface {
 
 	/**
 	 * Path to the stylesheet asset.
 	 *
-	 * @var AssetPath
+	 * @var Asset_Path
 	 */
-	private AssetPath $style_path;
+	private Asset_Path $style_path;
 
 	/**
 	 * Path to the script asset.
 	 *
-	 * @var AssetPath
+	 * @var Asset_Path
 	 */
-	private AssetPath $script_path;
+	private Asset_Path $script_path;
 
 	/**
 	 * Asset name.
@@ -72,16 +76,16 @@ class DefaultAssetLoader implements AssetLoaderInterface {
 	 *
 	 * Initializes the asset loader with style and script paths, asset information, and translation settings.
 	 *
-	 * @param AssetPath $style_path    Path to the style asset.
-	 * @param AssetPath $script_path   Path to the script asset.
-	 * @param string    $asset_name    Unique name for the asset.
-	 * @param string    $asset_version Version identifier for the asset.
-	 * @param string    $lang_path     Path to the language directory for translations.
-	 * @param string    $asset_domain  Text domain for translation. Default is 'default'.
+	 * @param Asset_Path $style_path    Path to the style asset.
+	 * @param Asset_Path $script_path   Path to the script asset.
+	 * @param string     $asset_name    Unique name for the asset.
+	 * @param string     $asset_version Version identifier for the asset.
+	 * @param string     $lang_path     Path to the language directory for translations.
+	 * @param string     $asset_domain  Text domain for translation. Default is 'default'.
 	 */
 	public function __construct(
-		AssetPath $style_path,
-		AssetPath $script_path,
+		Asset_Path $style_path,
+		Asset_Path $script_path,
 		string $asset_name,
 		string $asset_version,
 		string $lang_path,
@@ -128,7 +132,7 @@ class DefaultAssetLoader implements AssetLoaderInterface {
 	public function register_scripts(): void {
 		if ( $this->script_path->exists( 'js', true ) ) {
 			try {
-				$assets = ( new AssetMeta( $this->script_path->get_full_filename( 'php', true ) ) )->get_assets();
+				$assets = ( new Asset_Meta( $this->script_path->get_full_filename( 'php', true ) ) )->get_assets();
 			} catch ( \Error $e ) {
 				$assets = array(
 					'dependencies' => array( 'wp-plugins', 'wp-edit-post', 'wp-element', 'wp-i18n' ),

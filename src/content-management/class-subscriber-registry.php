@@ -1,10 +1,8 @@
 <?php
 /**
- * SubscriberRegistry Class
+ * File name: class-subscriber-registry.php
  *
- * This file contains the SubscriberRegistry class, which is responsible for registering
- * and managing theme subscribers for both admin and frontend assets. It utilizes sanitized
- * settings to conditionally register subscribers and ensures all necessary assets are loaded.
+ * Provides functionality for managing theme configurations and content.
  *
  * @package Kodi
  * @subpackage ContentManagement
@@ -17,37 +15,39 @@
 
 namespace Kodi\ContentManagement;
 
-use Kodi\AssetManagement\AssetPath;
-use Kodi\AssetManagement\DefaultAssetLoader;
+use Kodi\AssetManagement\Asset_Path;
+use Kodi\AssetManagement\Default_Asset_Loader;
+use Kodi\EventManagement\Interfaces\Subscriber_Interface;
 use Kodi\EventManagement\Interfaces\SubscriberInterface;
+use Kodi\Settings\Sanitized_Settings;
 use Kodi\Settings\SanitizedSettings;
-use Kodi\Subscriber\Admin\AdminAssetsSubscriber;
-use Kodi\Subscriber\Frontend\FrontendAssetsSubscriber;
+use Kodi\Subscriber\Admin\Admin_Assets_Subscriber;
+use Kodi\Subscriber\Frontend\Frontend_Assets_Subscriber;
 
 /**
- * Class SubscriberRegistry
+ * Class Subscriber_Registry
  *
  * Registers and manages theme subscribers for WordPress assets.
  *
  * @since 1.0.0
  */
-class SubscriberRegistry {
+class Subscriber_Registry {
 
 	/**
 	 * Array of registered subscribers.
 	 *
-	 * @var SubscriberInterface[]
+	 * @var Subscriber_Interface[]
 	 */
 	private array $subscribers = array();
 
 	/**
 	 * Registers subscribers based on provided settings.
 	 *
-	 * @param array             $subscribers Associative array of subscriber settings.
-	 * @param SanitizedSettings $settings    The sanitized settings instance.
+	 * @param array              $subscribers Associative array of subscriber settings.
+	 * @param Sanitized_Settings $settings    The sanitized settings instance.
 	 * @return void
 	 */
-	public function register_subscribers( array $subscribers, SanitizedSettings $settings ): void {
+	public function register_subscribers( array $subscribers, Sanitized_Settings $settings ): void {
 		foreach ( $subscribers as $setting => $options ) {
 			foreach ( $options as $option => $subscriber ) {
 				if ( $settings->has_support( $setting, $option ) ) {
@@ -65,25 +65,25 @@ class SubscriberRegistry {
 	/**
 	 * Registers default subscribers for frontend and admin assets.
 	 *
-	 * @param SanitizedSettings $settings The sanitized settings instance.
+	 * @param Sanitized_Settings $settings The sanitized settings instance.
 	 * @return void
 	 */
-	private function register_default_subscribers( SanitizedSettings $settings ): void {
+	private function register_default_subscribers( Sanitized_Settings $settings ): void {
 		$this->subscribers = array(
-			new FrontendAssetsSubscriber(
-				new DefaultAssetLoader(
-					new AssetPath( 'bundle-style', 'assets', get_stylesheet_directory(), get_stylesheet_uri() ),
-					new AssetPath( 'bundle', 'assets', get_stylesheet_directory(), get_stylesheet_uri() ),
+			new Frontend_Assets_Subscriber(
+				new Default_Asset_Loader(
+					new Asset_Path( 'bundle-style', 'assets', get_stylesheet_directory(), get_stylesheet_uri() ),
+					new Asset_Path( 'bundle', 'assets', get_stylesheet_directory(), get_stylesheet_uri() ),
 					$settings->get_property( 'slug' ) . '-bundle',
 					$settings->get_property( 'version' ),
 					trailingslashit( get_stylesheet_directory() ) . 'language',
 					$settings->get_property( 'slug' )
 				)
 			),
-			new AdminAssetsSubscriber(
-				new DefaultAssetLoader(
-					new AssetPath( 'admin-style', 'assets', get_stylesheet_directory(), get_stylesheet_directory_uri() ),
-					new AssetPath( 'admin', 'assets', get_stylesheet_directory(), get_stylesheet_directory_uri() ),
+			new Admin_Assets_Subscriber(
+				new Default_Asset_Loader(
+					new Asset_Path( 'admin-style', 'assets', get_stylesheet_directory(), get_stylesheet_directory_uri() ),
+					new Asset_Path( 'admin', 'assets', get_stylesheet_directory(), get_stylesheet_directory_uri() ),
 					$settings->get_property( 'slug' ) . '-admin',
 					$settings->get_property( 'version' ),
 					trailingslashit( get_stylesheet_directory() ) . 'language',
@@ -96,10 +96,10 @@ class SubscriberRegistry {
 	/**
 	 * Adds an additional subscriber to the registry.
 	 *
-	 * @param SubscriberInterface $subscriber The subscriber to be added.
+	 * @param Subscriber_Interface $subscriber The subscriber to be added.
 	 * @return void
 	 */
-	public function add_subscriber( SubscriberInterface $subscriber ): void {
+	public function add_subscriber( Subscriber_Interface $subscriber ): void {
 		$this->subscribers[] = $subscriber;
 	}
 

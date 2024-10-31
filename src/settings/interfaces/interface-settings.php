@@ -1,12 +1,16 @@
 <?php
 /**
- * Settings Interface
+ * File name: interface-settings.php
  *
- * Defines methods to access, retrieve, and manage configuration settings.
+ * Provides functionality for theme, assets, and event management.
  *
- * @package    Kodi
- * @subpackage Settings
- * @since      1.0.0
+ * @package Kodi
+ * @subpackage Various
+ * @since 1.0.0
+ * @version 1.0.0
+ * @license GPL-2.0-or-later
+ * @link    https://buzzdeveloper.net
+ * @author  BuzzDeveloper
  */
 
 namespace Kodi\Settings\Interfaces;
@@ -19,7 +23,7 @@ namespace Kodi\Settings\Interfaces;
  *
  * @since 1.0.0
  */
-interface SettingsInterface {
+interface Settings_Interface {
 
 	/**
 	 * Retrieve unformatted configuration data.

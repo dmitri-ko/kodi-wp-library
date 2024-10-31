@@ -1,27 +1,31 @@
 <?php
 /**
- * AdminAssetsSubscriber
+ * File name: class-admin-assets-subscriber.php
  *
- * Handles the registration and management of admin assets for WordPress.
+ * Provides functionality for theme, assets, and event management.
  *
- * @package    Kodi
- * @subpackage Subscriber\Admin
- * @since      1.0.0
+ * @package Kodi
+ * @subpackage Various
+ * @since 1.0.0
+ * @version 1.0.0
+ * @license GPL-2.0-or-later
+ * @link    https://buzzdeveloper.net
+ * @author  BuzzDeveloper
  */
 
 namespace Kodi\Subscriber\Admin;
 
-use Kodi\Subscriber\BaseAssetsSubscriber;
+use Kodi\Subscriber\Base_Assets_Subscriber;
 
 /**
- * Class AdminAssetsSubscriber
+ * Class Admin_Assets_Subscriber
  *
  * Subscribes to WordPress events related to admin asset loading,
  * specifically enqueuing styles and scripts for the WordPress admin dashboard.
  *
  * @since 1.0.0
  */
-class AdminAssetsSubscriber extends BaseAssetsSubscriber {
+class Admin_Assets_Subscriber extends Base_Assets_Subscriber {
 
 	/**
 	 * Get the list of events to subscribe to.

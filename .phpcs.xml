@@ -16,7 +16,5 @@
 	<arg name="cache" value=".phpcs.cache"/>
 
 	<rule ref="WordPress">
-		<!-- PSR4 -->
-		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
 	</rule>
 </ruleset>

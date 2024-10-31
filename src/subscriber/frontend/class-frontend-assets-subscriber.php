@@ -1,27 +1,31 @@
 <?php
 /**
- * FrontendAssetsSubscriber
+ * File name: class-frontend-assets-subscriber.php
  *
- * Handles the registration and enqueueing of frontend assets for the WordPress theme or plugin.
+ * Provides functionality for theme, assets, and event management.
  *
- * @package    Kodi
- * @subpackage Subscriber\Frontend
- * @since      1.0.0
+ * @package Kodi
+ * @subpackage Various
+ * @since 1.0.0
+ * @version 1.0.0
+ * @license GPL-2.0-or-later
+ * @link    https://buzzdeveloper.net
+ * @author  BuzzDeveloper
  */
 
 namespace Kodi\Subscriber\Frontend;
 
-use Kodi\Subscriber\BaseAssetsSubscriber;
+use Kodi\Subscriber\Base_Assets_Subscriber;
 
 /**
- * Class FrontendAssetsSubscriber
+ * Class Frontend_Assets_Subscriber
  *
  * Subscribes to WordPress events related to frontend assets, such as styles and scripts,
  * to properly manage asset loading.
  *
  * @since 1.0.0
  */
-class FrontendAssetsSubscriber extends BaseAssetsSubscriber {
+class Frontend_Assets_Subscriber extends Base_Assets_Subscriber {
 
 	/**
 	 * Get the list of subscribed events.

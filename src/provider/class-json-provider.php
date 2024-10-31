@@ -1,26 +1,30 @@
 <?php
 /**
- * JSONProvider
+ * File name: class-json-provider.php
  *
- * Provides functionality for reading data from JSON files.
+ * Provides functionality for theme, assets, and event management.
  *
- * @package    Kodi
- * @subpackage Provider
- * @since      1.0.0
+ * @package Kodi
+ * @subpackage Various
+ * @since 1.0.0
+ * @version 1.0.0
+ * @license GPL-2.0-or-later
+ * @link    https://buzzdeveloper.net
+ * @author  BuzzDeveloper
  */
 
 namespace Kodi\Provider;
 
-use Kodi\Provider\Interfaces\ProviderInterface;
+use Kodi\Provider\Interfaces\Provider_Interface;
 
 /**
- * Class JSONProvider
+ * Class JSON_Provider
  *
  * Reads JSON data from a given file and provides it in array format.
  *
  * @since 1.0.0
  */
-class JSONProvider implements ProviderInterface {
+class JSON_Provider implements Provider_Interface {
 
 	/**
 	 * Path to the JSON file.
@@ -32,7 +36,7 @@ class JSONProvider implements ProviderInterface {
 	/**
 	 * Constructor
 	 *
-	 * Initializes the JSONProvider with a file path.
+	 * Initializes the JSON_Provider with a file path.
 	 *
 	 * @since 1.0.0
 	 *

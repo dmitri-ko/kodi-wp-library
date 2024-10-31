@@ -1,34 +1,33 @@
 <?php
 /**
- * ThemeContentProvider Class
+ * File name: class-theme-content-provider.php
  *
- * Provides a unified interface to manage theme settings, subscribers, and shortcodes.
- * This class handles loading, validating, and configuring theme settings from a JSON file,
- * as well as registering subscribers and shortcodes.
+ * Provides functionality for managing theme configurations and content.
  *
  * @package Kodi
  * @subpackage ContentManagement
  * @since 1.0.0
  * @version 1.0.0
  * @license GPL-2.0-or-later
+ * @author  BuzzDeveloper
  * @link    https://buzzdeveloper.net
  */
 
 namespace Kodi\ContentManagement;
 
-use Kodi\ContentManagement\Interfaces\ContentDataInterface;
+use Kodi\ContentManagement\Interfaces\Content_Data_Interface;
 use Kodi\EventManagement\SubscriberInterface;
-use Kodi\ContentManagement\SubscriberRegistry;
-use Kodi\ContentManagement\ShortcodeRegistry;
+use Kodi\ContentManagement\Subscriber_Registry;
+use Kodi\ContentManagement\Shortcode_Registry;
 
 /**
- * Class ThemeContentProvider
+ * Class Theme_Content_Provider
  *
  * Provides a unified interface to manage theme settings, subscribers, and shortcodes.
  *
  * @since 1.0.0
  */
-class ThemeContentProvider implements ContentDataInterface {
+class Theme_Content_Provider implements Content_Data_Interface {
 
 	/**
 	 * JSON configuration file name.
@@ -47,16 +46,16 @@ class ThemeContentProvider implements ContentDataInterface {
 	/**
 	 * Subscriber registry instance.
 	 *
-	 * @var SubscriberRegistry
+	 * @var Subscriber_Registry
 	 */
-	private SubscriberRegistry $subscriber_registry;
+	private Subscriber_Registry $subscriber_registry;
 
 	/**
 	 * Shortcode registry instance.
 	 *
-	 * @var ShortcodeRegistry
+	 * @var Shortcode_Registry
 	 */
-	private ShortcodeRegistry $shortcode_registry;
+	private Shortcode_Registry $shortcode_registry;
 
 	/**
 	 * Theme subscribers array.
@@ -92,8 +91,8 @@ class ThemeContentProvider implements ContentDataInterface {
 		$this->theme_subscribers   = $theme_subscribers;
 		$this->theme_shortcodes    = $theme_shortcodes;
 		$this->default_settings    = $default_settings;
-		$this->subscriber_registry = new SubscriberRegistry();
-		$this->shortcode_registry  = new ShortcodeRegistry();
+		$this->subscriber_registry = new Subscriber_Registry();
+		$this->shortcode_registry  = new Shortcode_Registry();
 	}
 
 	/**
@@ -105,7 +104,7 @@ class ThemeContentProvider implements ContentDataInterface {
 	 * @return void
 	 */
 	private function configure(): void {
-		$theme_settings_manager = new ThemeSettingsManager();
+		$theme_settings_manager = new Theme_Settings_Manager();
 		$file_path              = $this->get_file_path_from_theme( self::CONFIG_NAME );
 
 		$ruleset = array(

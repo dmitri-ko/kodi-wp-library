@@ -1,24 +1,34 @@
 <?php
 /**
- * Theme Interface for WordPress
+ * Theme_Interface for WordPress
  *
  * This interface defines the basic structure that any theme implementation should follow.
  *
- * @package Kodi
+ * @package    Kodi
  * @subpackage Theme
+ * @since      1.0.0
+ * @version    1.0.0
+ * @license    GPL-2.0-or-later
+ * @link       https://buzzdeveloper.net
+ * @author     BuzzDeveloper
  */
 
 namespace Kodi\Theme\Interfaces;
 
 /**
- * Interface ThemeInterface
+ * Interface Theme_Interface
+ *
+ * Specifies methods required for theme implementation.
+ *
+ * @since 1.0.0
  */
-interface ThemeInterface {
+interface Theme_Interface {
 
 	/**
 	 * Load theme resources and initialize settings.
 	 *
+	 * @since 1.0.0
 	 * @return void
 	 */
-	public function load_theme();
+	public function load_theme(): void;
 }

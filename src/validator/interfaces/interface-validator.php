@@ -1,24 +1,28 @@
 <?php
 /**
- * ValidatorInterface
+ * Validator_Interface
  *
  * Defines the contract for validating key/value pairs in the WordPress environment.
  *
  * @package    Kodi
  * @subpackage Validator
  * @since      1.0.0
+ * @version    1.0.0
+ * @license    GPL-2.0-or-later
+ * @link       https://buzzdeveloper.net
+ * @author     BuzzDeveloper
  */
 
 namespace Kodi\Validator\Interfaces;
 
 /**
- * Interface ValidatorInterface
+ * Interface Validator_Interface
  *
  * Represents a validator that checks whether specific key/value pairs meet defined criteria.
  *
  * @since 1.0.0
  */
-interface ValidatorInterface {
+interface Validator_Interface {
 
 	/**
 	 * Check if the provided key/value pair is allowed.

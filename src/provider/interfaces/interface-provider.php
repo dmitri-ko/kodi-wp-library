@@ -1,25 +1,29 @@
 <?php
 /**
- * ProviderInterface
+ * File name: interface-provider.php
  *
- * Defines a contract for data retrieval within the WordPress environment.
+ * Provides functionality for theme, assets, and event management.
  *
- * @package    Kodi
- * @subpackage Provider
- * @since      1.0.0
+ * @package Kodi
+ * @subpackage Various
+ * @since 1.0.0
+ * @version 1.0.0
+ * @license GPL-2.0-or-later
+ * @link    https://buzzdeveloper.net
+ * @author  BuzzDeveloper
  */
 
 namespace Kodi\Provider\Interfaces;
 
 /**
- * Interface ProviderInterface
+ * Interface Provider_Interface
  *
  * Represents a data provider that offers a method to retrieve data.
  * Classes implementing this interface should provide specific data-fetching logic.
  *
  * @since 1.0.0
  */
-interface ProviderInterface {
+interface Provider_Interface {
 
 	/**
 	 * Retrieve data from the provider.

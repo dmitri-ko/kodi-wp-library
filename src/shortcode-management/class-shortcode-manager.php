@@ -1,28 +1,32 @@
 <?php
 /**
- * ShortcodeManager Class
+ * Shortcode_Manager Class
  *
- * This file contains the ShortcodeManager class, which handles
+ * This file contains the Shortcode_Manager class, which handles
  * the registration, execution, and removal of shortcodes within
  * the WordPress environment.
  *
  * @package Kodi
  * @subpackage Shortcodes
- * @author  BuzzDeveloper
+ * @since 1.0.0
+ * @version 1.0.0
  * @license GPL-2.0-or-later
  * @link    https://buzzdeveloper.net
+ * @author  BuzzDeveloper
  */
 
 namespace Kodi\Shortcodes;
 
-use Kodi\Shortcodes\Interfaces\ShortcodeInterface;
+use Kodi\Shortcodes\Interfaces\Shortcode_Interface;
 
 /**
- * Class ShortcodeManager
+ * Class Shortcode_Manager
  *
  * Manages the registration, execution, and removal of shortcodes.
+ *
+ * @since 1.0.0
  */
-class ShortcodeManager {
+class Shortcode_Manager {
 
 	/**
 	 * Register a callback function for a given shortcode tag.
@@ -39,11 +43,11 @@ class ShortcodeManager {
 	/**
 	 * Register a shortcode by its interface.
 	 *
-	 * @param ShortcodeInterface $shortcode The shortcode object implementing ShortcodeInterface.
+	 * @param Shortcode_Interface $shortcode The shortcode object implementing Shortcode_Interface.
 	 *
 	 * @return void
 	 */
-	public function add_shortcode( ShortcodeInterface $shortcode ): void {
+	public function add_shortcode( Shortcode_Interface $shortcode ): void {
 		$this->add_callback( $shortcode->get_tag(), array( $shortcode, $shortcode->get_handler() ) );
 	}
 
@@ -72,11 +76,11 @@ class ShortcodeManager {
 	/**
 	 * Remove a shortcode by its interface.
 	 *
-	 * @param ShortcodeInterface $shortcode The shortcode object implementing ShortcodeInterface.
+	 * @param Shortcode_Interface $shortcode The shortcode object implementing Shortcode_Interface.
 	 *
 	 * @return void
 	 */
-	public function remove_shortcode( ShortcodeInterface $shortcode ): void {
+	public function remove_shortcode( Shortcode_Interface $shortcode ): void {
 		remove_shortcode( $shortcode->get_tag() );
 	}
 }

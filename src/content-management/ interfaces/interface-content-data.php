@@ -1,18 +1,21 @@
 <?php
 /**
- * ContentDataInterface
+ * Content_Data_Interface
  *
  * Defines methods for retrieving theme or plugin data such as subscribers and shortcodes.
  *
  * @package    Kodi
  * @subpackage ContentManagement
  * @since      1.0.0
+ * @version    1.0.0
+ * @license    GPL-2.0-or-later
+ * @author     BuzzDeveloper
  */
 
 namespace Kodi\ContentManagement\Interfaces;
 
 /**
- * Interface ContentDataInterface
+ * Interface Content_Data_Interface
  *
  * Provides methods for accessing different types of content data.
  * Classes implementing this interface should handle data retrieval,
@@ -20,7 +23,7 @@ namespace Kodi\ContentManagement\Interfaces;
  *
  * @since 1.0.0
  */
-interface ContentDataInterface {
+interface Content_Data_Interface {
 
 	/**
 	 * Retrieve an array of subscribers.

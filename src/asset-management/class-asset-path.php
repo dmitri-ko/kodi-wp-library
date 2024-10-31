@@ -1,18 +1,22 @@
 <?php
 /**
- * AssetPath
+ * File name: class-asset-path.php
  *
- * Manages asset paths and URLs for loading styles and scripts within the WordPress environment.
+ * Provides functionality for theme, assets, and event management.
  *
- * @package    Kodi
- * @subpackage AssetManagement
- * @since      1.0.0
+ * @package Kodi
+ * @subpackage Various
+ * @since 1.0.0
+ * @version 1.0.0
+ * @license GPL-2.0-or-later
+ * @link    https://buzzdeveloper.net
+ * @author  BuzzDeveloper
  */
 
 namespace Kodi\AssetManagement;
 
 /**
- * Class AssetPath
+ * Class Asset_Path
  *
  * Provides functionality to create paths and URLs for different plugin or theme resources.
  *
@@ -21,7 +25,7 @@ namespace Kodi\AssetManagement;
  *
  * @since 1.0.0
  */
-class AssetPath {
+class Asset_Path {
 
 	/**
 	 * The resource name.

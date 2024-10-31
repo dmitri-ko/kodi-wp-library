@@ -1,48 +1,48 @@
 <?php
 /**
- * ThemeLoader Class
+ * Theme_Loader Class
  *
- * This file contains the ThemeLoader class, which is responsible for loading
+ * This file contains the Theme_Loader class, which is responsible for loading
  * and initializing a WordPress theme, including registering event subscribers
  * and shortcodes. It ensures the theme is fully prepared for the WordPress
- * environment by utilizing EventManager and ShortcodeManager services.
+ * environment by utilizing Event_Manager and Shortcode_Manager services.
  *
- * @package Kodi
+ * @package    Kodi
  * @subpackage Theme
- * @since 1.0.0
- * @version 1.0.0
- * @author  BuzzDeveloper
- * @license GPL-2.0-or-later
- * @link    https://buzzdeveloper.net
+ * @since      1.0.0
+ * @version    1.0.0
+ * @author     BuzzDeveloper
+ * @license    GPL-2.0-or-later
+ * @link       https://buzzdeveloper.net
  */
 
 namespace Kodi\Theme;
 
-use Kodi\ContentManagement\Interfaces\ContentDataInterface;
-use Kodi\EventManagement\EventManager;
-use Kodi\Shortcodes\ShortcodeManager;
-use Kodi\Theme\Interfaces\ThemeInterface;
+use Kodi\ContentManagement\Interfaces\Content_Data_Interface;
+use Kodi\EventManagement\Event_Manager;
+use Kodi\Shortcodes\Shortcode_Manager;
+use Kodi\Theme\Interfaces\Theme_Interface;
 
 /**
- * Class ThemeLoader
+ * Class Theme_Loader
  *
  * Loads and initializes the WordPress theme, including subscribers and shortcodes.
  *
  * @since 1.0.0
  */
-class ThemeLoader implements ThemeInterface {
+class Theme_Loader implements Theme_Interface {
 
 	/**
 	 * Event manager instance for managing theme events.
 	 *
-	 * @var EventManager
+	 * @var Event_Manager
 	 */
 	private $event_manager;
 
 	/**
 	 * Shortcode manager instance for managing shortcodes.
 	 *
-	 * @var ShortcodeManager
+	 * @var Shortcode_Manager
 	 */
 	private $shortcode_manager;
 
@@ -63,21 +63,22 @@ class ThemeLoader implements ThemeInterface {
 	/**
 	 * The theme content configurator.
 	 *
-	 * @var ContentDataInterface
+	 * @var Content_Data_Interface
 	 */
 	private $content_data_interface;
 
 	/**
-	 * ThemeLoader constructor.
+	 * Theme_Loader constructor.
 	 *
 	 * Initializes the theme with the given name, configurator, event manager, and shortcode manager.
 	 *
-	 * @param string               $theme_name             The theme name.
-	 * @param ContentDataInterface $content_data_interface Content configurator for theme settings.
-	 * @param EventManager         $event_manager          Event manager for handling theme events.
-	 * @param ShortcodeManager     $shortcode_manager      Shortcode manager for handling theme shortcodes.
+	 * @since 1.0.0
+	 * @param string                 $theme_name             The theme name.
+	 * @param Content_Data_Interface $content_data_interface Content configurator for theme settings.
+	 * @param Event_Manager          $event_manager          Event manager for handling theme events.
+	 * @param Shortcode_Manager      $shortcode_manager      Shortcode manager for handling theme shortcodes.
 	 */
-	public function __construct( string $theme_name, ContentDataInterface $content_data_interface, EventManager $event_manager, ShortcodeManager $shortcode_manager ) {
+	public function __construct( string $theme_name, Content_Data_Interface $content_data_interface, Event_Manager $event_manager, Shortcode_Manager $shortcode_manager ) {
 		$this->theme_name             = $theme_name;
 		$this->content_data_interface = $content_data_interface;
 		$this->event_manager          = $event_manager;
@@ -87,6 +88,7 @@ class ThemeLoader implements ThemeInterface {
 	/**
 	 * Checks if the theme is loaded.
 	 *
+	 * @since 1.0.0
 	 * @return bool True if the theme is loaded, false otherwise.
 	 */
 	public function is_loaded(): bool {
@@ -99,6 +101,7 @@ class ThemeLoader implements ThemeInterface {
 	 * Initializes the theme by loading subscribers and shortcodes,
 	 * and sets the loaded flag to true once completed.
 	 *
+	 * @since 1.0.0
 	 * @return void
 	 */
 	public function load_theme(): void {
@@ -117,6 +120,7 @@ class ThemeLoader implements ThemeInterface {
 	 * This method iterates over subscribers provided by the configurator
 	 * and registers each with the event manager.
 	 *
+	 * @since 1.0.0
 	 * @return void
 	 */
 	private function load_subscribers(): void {
@@ -131,6 +135,7 @@ class ThemeLoader implements ThemeInterface {
 	 * This method iterates over shortcodes provided by the configurator
 	 * and registers each with the shortcode manager.
 	 *
+	 * @since 1.0.0
 	 * @return void
 	 */
 	private function load_shortcodes(): void {
